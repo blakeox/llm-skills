@@ -4,30 +4,32 @@
 
 ```bash
 git clone https://github.com/blakeox/llm-skills.git ~/Documents/GitHub/llm-skills
-mkdir -p ~/.copilot/skills
-rsync -a ~/Documents/GitHub/llm-skills/skills/_house-style/ ~/.copilot/skills/_house-style/
-for skill in api-review dep-audit onboarding-audit paranoid-review plan-eng-review plan-product-review postmortem retro section-review ship tech-debt; do
-  rsync -a ~/Documents/GitHub/llm-skills/skills/$skill/ ~/.copilot/skills/$skill/
-done
+cd ~/Documents/GitHub/llm-skills
+./scripts/install-copilot-skills.sh
+./scripts/verify-copilot-skills.sh
 ```
 
-After copying the skills, restart Copilot CLI or start a new session.
+After installing, start a new Copilot CLI session so the updated skills are loaded.
 
-## Verify
+## Verify manually
 
 ```bash
 ls -la ~/.copilot/skills
 ```
 
-You should see `_house-style` plus the published skill directories listed above.
+You should see `_house-style` plus the directories listed in `skills/manifest.txt`.
 
 ## Update later
 
 ```bash
 cd ~/Documents/GitHub/llm-skills
 git pull
-rsync -a ~/Documents/GitHub/llm-skills/skills/_house-style/ ~/.copilot/skills/_house-style/
-for skill in api-review dep-audit onboarding-audit paranoid-review plan-eng-review plan-product-review postmortem retro section-review ship tech-debt; do
-  rsync -a ~/Documents/GitHub/llm-skills/skills/$skill/ ~/.copilot/skills/$skill/
-done
+./scripts/install-copilot-skills.sh
+./scripts/verify-copilot-skills.sh
 ```
+
+## Notes
+
+- The canonical published skill list lives in `skills/manifest.txt`.
+- `scripts/install-copilot-skills.sh` uses `rsync -a --delete` so removed files are cleaned up locally.
+- `scripts/verify-copilot-skills.sh` checks for `_house-style` reference files and `SKILL.md` in each published skill.
