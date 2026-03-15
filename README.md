@@ -1,47 +1,49 @@
 # LLM Skills
 
-Public home for Blake Oxford's open-source agent skills.
+Public home for Blake Oxford's open-source workflow and review skills.
 
 ## Included skills
 
-- `section-review` — a first-principles, truth-seeking review skill for evaluating a product section or workflow.
+- `api-review`
+- `dep-audit`
+- `onboarding-audit`
+- `paranoid-review`
+- `plan-eng-review`
+- `plan-product-review`
+- `postmortem`
+- `retro`
+- `section-review`
+- `ship`
+- `tech-debt`
 
-This repository intentionally publishes only one ICCI-originated skill: `section-review`.
-
-## Repository layout
-
-```text
-llm-skills/
-└── skills/
-    └── section-review/
-        ├── SKILL.md
-        └── references/
-```
+These are the ICCI-originated skills currently approved for publication in this repository.
 
 ## Install for GitHub Copilot CLI
 
 ```bash
 git clone https://github.com/blakeox/llm-skills.git ~/Documents/GitHub/llm-skills
 mkdir -p ~/.copilot/skills
-rsync -a ~/Documents/GitHub/llm-skills/skills/section-review/ ~/.copilot/skills/section-review/
+for skill in api-review dep-audit onboarding-audit paranoid-review plan-eng-review plan-product-review postmortem retro section-review ship tech-debt; do
+  rsync -a ~/Documents/GitHub/llm-skills/skills/$skill/ ~/.copilot/skills/$skill/
+done
 ```
 
-Start a new Copilot session after installing or updating the skill so it gets picked up.
+Start a new Copilot session after installing or updating the skills so they get picked up.
 
-## Usage
+## Repository layout
 
-Invoke the skill by asking Copilot for a section review, for example:
-
-- `Review the onboarding flow.`
-- `Give me a blunt review of the settings page.`
-- `Rate the search workflow and tell me what should be cut.`
-
-## Updating
-
-```bash
-cd ~/Documents/GitHub/llm-skills
-git pull
-rsync -a ~/Documents/GitHub/llm-skills/skills/section-review/ ~/.copilot/skills/section-review/
+```text
+llm-skills/
+└── skills/
+    ├── api-review/
+    ├── dep-audit/
+    ├── onboarding-audit/
+    ├── paranoid-review/
+    ├── plan-eng-review/
+    ├── plan-product-review/
+    ├── postmortem/
+    ├── retro/
+    ├── section-review/
+    ├── ship/
+    └── tech-debt/
 ```
-
-Then start a new Copilot session.

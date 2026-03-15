@@ -5,7 +5,7 @@ user-invocable: true
 argument-hint: "[section name]"
 ---
 
-Read `references/rating-rubric.md` before writing the review.
+Read `../_house-style/house-style.md` and `references/rating-rubric.md` before writing the review.
 
 ## Stage calibration
 
