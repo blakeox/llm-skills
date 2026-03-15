@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+.idea/
+.vscode/
+
+# Sensitive files — never commit
+.env
+.env.*
+*.key
+*.pem
+*.p12
+credentials/*.txt
+!credentials/README.md
+api_key*
+tokens.json
