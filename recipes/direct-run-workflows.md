@@ -75,6 +75,12 @@ Use The Google Cloud Shipper. Review this GCP release for IAM, secret access, st
 Use The Azure Shipper. Review this Azure release for managed identity, Key Vault, slot or revision behavior, ingress, startup, and rollback risk. End with safe to release / fix before release / Azure release red flag.
 ```
 
+## Supabase release directly
+
+```text
+Use The Supabase Shipper. Review this Supabase release for migration safety, RLS coverage, auth config, Edge Function secrets, storage policy mistakes, and rollback risk. End with safe to release / fix before release / Supabase release red flag.
+```
+
 ## Platform detection directly
 
 ```text

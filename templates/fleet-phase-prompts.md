@@ -185,7 +185,15 @@ Use when shipping to App Service, Functions, Container Apps, AKS, slots, or othe
 Run an Azure release review. Use The Azure Shipper to audit managed identity, Key Vault access, app settings, slot or revision behavior, ingress, and rollback realism. Finish with The Enforcer if this is the final release gate.
 ```
 
-## 24. Platform detection phase
+## 24. Supabase release phase
+
+Use when shipping Supabase migrations, RLS changes, auth settings, Edge Functions, storage policy updates, or other Supabase runtime surfaces.
+
+```text
+Run a Supabase release review. Use The Supabase Shipper to audit migrations, RLS, auth configuration, Edge Function secrets, storage policies, and rollback realism. Finish with The Enforcer if this is the final release gate.
+```
+
+## 25. Platform detection phase
 
 Use when the repo is shipping somewhere, but you want the system to choose the right provider-specific shipper first.
 

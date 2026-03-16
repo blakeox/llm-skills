@@ -39,6 +39,7 @@ Available specialist agents:
 - `The AWS Shipper`
 - `The Google Cloud Shipper`
 - `The Azure Shipper`
+- `The Supabase Shipper`
 - `The Platform Administrator`
 
 Decision rules:
@@ -65,6 +66,7 @@ Decision rules:
     - AWS release, Lambda/ECS/EKS/API Gateway/CloudFront rollout, or IAM/network config risk -> `The AWS Shipper`
     - Google Cloud release, Cloud Run/GKE rollout, or GCP config risk -> `The Google Cloud Shipper`
     - Azure release, slots, managed identity, or Key Vault rollout risk -> `The Azure Shipper`
+    - Supabase release, migrations/RLS/auth/Edge Functions/storage risk -> `The Supabase Shipper`
     - Platform-specific shipping where the provider is unclear -> `The Platform Administrator`
 
 2. Use fleet-style delegation if the task spans multiple concerns.
@@ -111,6 +113,7 @@ Decision rules:
     - AWS release -> `The AWS Shipper` + `The Enforcer`
     - Google Cloud release -> `The Google Cloud Shipper` + `The Enforcer`
     - Azure release -> `The Azure Shipper` + `The Enforcer`
+    - Supabase release -> `The Supabase Shipper` + `The Enforcer`
     - Platform release with unclear provider -> `The Platform Administrator` + `The Enforcer`
 
 5. When delegating, explain the routing clearly:

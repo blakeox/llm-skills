@@ -2,7 +2,7 @@
 
 Public home for Blake Oxford's open-source workflow and review skills.
 
-Current bundle version: `0.3.0`
+Current bundle version: `0.4.0`
 
 This repo now also includes **repository-level custom agent scaffolds** in `.github/agents/` that bundle the skills into practical teams for Copilot CLI and other Copilot agent surfaces.
 
@@ -26,6 +26,7 @@ It also now includes **Copilot routing instructions** and **phase prompt templat
 - `retro`
 - `section-review`
 - `ship`
+- `supabase-ship`
 - `tech-debt`
 - `ui-designer`
 - `ux-designer`
@@ -60,6 +61,7 @@ The `.github/agents/` directory contains opinionated agent profiles that bundle 
 - `google-cloud-ship.agent.md` — Google Cloud-specific release specialist
 - `azure-ship.agent.md` — Azure-specific release specialist
 - `platform-administrator.agent.md` — detects likely platform and routes to the right provider-specific shipper
+- `supabase-ship.agent.md` — Supabase-specific release specialist
 
 Important nuance: skills are still selected by relevance. The custom agents do not hard-pin a skill in the Copilot runtime. Instead, their prompts tell Copilot which skills to lean on for that role.
 
@@ -84,6 +86,7 @@ With these additions, the repo is no longer only review-oriented. It now has a f
 - ship on AWS with `The AWS Shipper`
 - ship on Google Cloud with `The Google Cloud Shipper`
 - ship on Azure with `The Azure Shipper`
+- ship on Supabase with `The Supabase Shipper`
 - detect the right platform shipper with `The Platform Administrator`
 - gate with `The Enforcer`
 
@@ -169,6 +172,7 @@ Use this as the quick "who should I call?" reference.
 | AWS release or rollout | `The AWS Shipper` | `The AWS Shipper` + `The Enforcer` |
 | Google Cloud release or rollout | `The Google Cloud Shipper` | `The Google Cloud Shipper` + `The Enforcer` |
 | Azure release or slot/revision rollout | `The Azure Shipper` | `The Azure Shipper` + `The Enforcer` |
+| Supabase release or rollout | `The Supabase Shipper` | `The Supabase Shipper` + `The Enforcer` |
 | Unknown platform release | `The Platform Administrator` | `The Platform Administrator` + relevant shipper + `The Enforcer` |
 | Incident / retro / debt learning | `The Investigator` | `The Investigator` + `The Architect` + `The Reliability Engineer` |
 
@@ -387,6 +391,7 @@ llm-skills/
 │   │   ├── product-design-review.agent.md
 │   │   ├── product-mind.agent.md
 │   │   ├── security.agent.md
+│   │   ├── supabase-ship.agent.md
 │   │   └── tester.agent.md
 │   └── instructions/
 │       ├── agents.instructions.md
@@ -445,6 +450,7 @@ llm-skills/
     ├── retro/
     ├── section-review/
     ├── ship/
+    ├── supabase-ship/
     ├── tech-debt/
     ├── ui-designer/
     └── ux-designer/
