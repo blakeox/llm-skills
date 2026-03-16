@@ -99,6 +99,12 @@ In the interactive CLI, you can also say:
 Use The Orchestrator to decide whether this should stay single-agent or fan out to fleet.
 ```
 
+If you want a shorter operational handoff instead of the full routing memo, say so explicitly:
+
+```text
+Use The Orchestrator in concise handoff mode. Just tell me the next agent to run, give me one clean prompt, and keep it short.
+```
+
 The intended workflow is:
 1. Start with `The Orchestrator`
 2. Let it choose the smallest useful lineup
@@ -110,6 +116,16 @@ Treat it like a dispatcher:
 - `The Orchestrator` chooses
 - specialist agents analyze
 - you or a final synthesis pass combines the outputs
+
+Use full routing mode when you want the reasoning, lineup, and sequencing spelled out.
+Use concise handoff mode when you already trust the router and just want the next move.
+
+The Orchestrator now has anti-stall behavior:
+- if you say "do it", "run it", or "fix it", it should bias toward concise handoff mode
+- if the ask is repeated, it should stop repeating the full routing memo
+- if the situation is fuzzy but still actionable, it should choose the best specialist instead of staying meta
+- if the issue is branch hygiene or cleanup, it should bias toward `The Executor`
+- if the issue is a real defect or blocker, it should bias toward `The Debugger`
 
 ## Routing matrix
 
@@ -255,11 +271,12 @@ Use these with `guide/evaluation-rubric.md` and the golden transcripts in `examp
 
 ## Scenario recipes and goldens
 
-If you want copy-paste workflows or concrete golden response shapes instead of inventing prompts from scratch, use the files in `recipes/` and `examples/`.
+If you want copy-paste workflows or concrete golden response shapes instead of inventing prompts from scratch, use the files in `recipes/` and `examples/`. The direct-run recipe is the fastest path when you do not need routing first.
 
 - `recipes/feature-workflow.md` — feature from idea to pre-merge
 - `recipes/incident-workflow.md` — outage, regression, and follow-through
 - `recipes/platform-change-workflow.md` — migrations, contracts, security, reliability, and ship gate
+- `recipes/direct-run-workflows.md` — fast-path prompts when you already know the right specialist
 - `examples/orchestrator-transcript.md` — example orchestrator prompt and response shape
 - `examples/fleet-review-transcript.md` — example specialist lineup and synthesis flow
 - `examples/executor-transcript.md` — example execution-scoping response shape
@@ -372,6 +389,7 @@ llm-skills/
 │   ├── quick-reference.md
 │   └── troubleshooting.md
 ├── recipes/
+│   ├── direct-run-workflows.md
 │   ├── feature-workflow.md
 │   ├── incident-workflow.md
 │   └── platform-change-workflow.md

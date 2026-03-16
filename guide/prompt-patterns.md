@@ -28,7 +28,23 @@ Use when you already know the right lineup.
 Run a fleet review for this work. Use [agent A] for [question], [agent B] for [question], and [agent C] for the final gate. Keep each agent in its lane. Return blockers first, then one synthesis.
 ```
 
-## 4. Synthesis prompt
+## 4. Orchestrator concise handoff prompt
+
+Use when you want routing without the long memo.
+
+```text
+Use The Orchestrator in concise handoff mode. Just tell me the next agent to run, give me one launch-ready prompt, and keep the answer short.
+```
+
+## 5. Orchestrator action-bias prompt
+
+Use when you want the router to stop explaining and move to action.
+
+```text
+Use The Orchestrator and bias toward action. If this is implementation cleanup, route to The Executor. If this is a real defect or blocker, route to The Debugger. Do not give me the long routing memo.
+```
+
+## 6. Synthesis prompt
 
 Use after specialists have already done their work.
 
@@ -36,7 +52,7 @@ Use after specialists have already done their work.
 Synthesize these specialist findings into one decision. Merge overlapping points, separate blockers from optional improvements, resolve conflicts explicitly, and end with one clear verdict.
 ```
 
-## 5. Good risk framing
+## 7. Good risk framing
 
 Prefer risk framing like this:
 
@@ -56,7 +72,7 @@ Avoid vague framing like this:
 - give feedback
 - make it better
 
-## 6. Example transformations
+## 8. Example transformations
 
 ### Weak
 
