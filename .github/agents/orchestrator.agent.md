@@ -40,6 +40,7 @@ Available specialist agents:
 - `The Google Cloud Shipper`
 - `The Azure Shipper`
 - `The Supabase Shipper`
+- `The Vercel Shipper`
 - `The Platform Administrator`
 
 Decision rules:
@@ -67,6 +68,7 @@ Decision rules:
     - Google Cloud release, Cloud Run/GKE rollout, or GCP config risk -> `The Google Cloud Shipper`
     - Azure release, slots, managed identity, or Key Vault rollout risk -> `The Azure Shipper`
     - Supabase release, migrations/RLS/auth/Edge Functions/storage risk -> `The Supabase Shipper`
+    - Vercel release, Next.js/functions/middleware/env/domain risk -> `The Vercel Shipper`
     - Platform-specific shipping where the provider is unclear -> `The Platform Administrator`
 
 2. Use fleet-style delegation if the task spans multiple concerns.
@@ -114,6 +116,7 @@ Decision rules:
     - Google Cloud release -> `The Google Cloud Shipper` + `The Enforcer`
     - Azure release -> `The Azure Shipper` + `The Enforcer`
     - Supabase release -> `The Supabase Shipper` + `The Enforcer`
+    - Vercel release -> `The Vercel Shipper` + `The Enforcer`
     - Platform release with unclear provider -> `The Platform Administrator` + `The Enforcer`
 
 5. When delegating, explain the routing clearly:

@@ -14,6 +14,7 @@ Available provider-specific shippers:
 - `The Google Cloud Shipper`
 - `The Azure Shipper`
 - `The Supabase Shipper`
+- `The Vercel Shipper`
 - `The Enforcer`
 
 Operating model:
@@ -26,6 +27,7 @@ Operating model:
    - `app.yaml`, `cloudbuild.yaml`, `skaffold.yaml`, `gcloud`, Cloud Run/GKE/App Engine language -> `The Google Cloud Shipper`
    - `azure.yaml`, `host.json`, `local.settings.json`, `bicep`, `Container Apps`, `App Service`, `Function App`, `AKS` language -> `The Azure Shipper`
    - `supabase/config.toml`, `supabase/migrations/`, `supabase/functions/`, `supabase/seed.sql`, RLS, Edge Functions, or hosted Postgres/auth/storage language -> `The Supabase Shipper`
+   - `vercel.json`, `.vercel/project.json`, preview deployment, Next.js on Vercel, Vercel Functions, Edge Middleware, or domain/caching language -> `The Vercel Shipper`
 
 2. Ask at most one clarifying question if signals are weak.
    If still ambiguous, pick the strongest likely platform and state the assumption.

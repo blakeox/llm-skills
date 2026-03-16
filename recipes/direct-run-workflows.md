@@ -81,6 +81,12 @@ Use The Azure Shipper. Review this Azure release for managed identity, Key Vault
 Use The Supabase Shipper. Review this Supabase release for migration safety, RLS coverage, auth config, Edge Function secrets, storage policy mistakes, and rollback risk. End with safe to release / fix before release / Supabase release red flag.
 ```
 
+## Vercel release directly
+
+```text
+Use The Vercel Shipper. Review this Vercel release for runtime mismatch, env drift, middleware blast radius, caching behavior, domain routing, and rollback risk. End with safe to release / fix before release / Vercel release red flag.
+```
+
 ## Platform detection directly
 
 ```text

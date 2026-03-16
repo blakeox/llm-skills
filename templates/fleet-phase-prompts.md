@@ -193,7 +193,15 @@ Use when shipping Supabase migrations, RLS changes, auth settings, Edge Function
 Run a Supabase release review. Use The Supabase Shipper to audit migrations, RLS, auth configuration, Edge Function secrets, storage policies, and rollback realism. Finish with The Enforcer if this is the final release gate.
 ```
 
-## 25. Platform detection phase
+## 25. Vercel release phase
+
+Use when shipping a Next.js app, Vercel Functions, Edge Middleware, production promotion, domains, or other Vercel runtime surfaces.
+
+```text
+Run a Vercel release review. Use The Vercel Shipper to audit runtime choices, env vars, middleware and rewrite blast radius, caching behavior, domain configuration, and rollback realism. Finish with The Enforcer if this is the final release gate.
+```
+
+## 26. Platform detection phase
 
 Use when the repo is shipping somewhere, but you want the system to choose the right provider-specific shipper first.
 

@@ -17,12 +17,14 @@ This repository was expanded from a skill library into a fuller Copilot operatin
 - `skills/google-cloud-ship/`
 - `skills/azure-ship/`
 - `skills/supabase-ship/`
+- `skills/vercel-ship/`
 - `.github/agents/cloudflare-ship.agent.md`
 - `.github/agents/apple-ship.agent.md`
 - `.github/agents/aws-ship.agent.md`
 - `.github/agents/google-cloud-ship.agent.md`
 - `.github/agents/azure-ship.agent.md`
 - `.github/agents/supabase-ship.agent.md`
+- `.github/agents/vercel-ship.agent.md`
 
 ### Added custom agents
 
@@ -86,7 +88,7 @@ This repository was expanded from a skill library into a fuller Copilot operatin
 ### Added operational maturity support
 
 - `VERSION`
-- bumped to `0.4.0` for expanded provider-specific shipping support
+- bumped to `0.5.0` for expanded provider-specific shipping support
 
 ### Added evaluation harness
 
