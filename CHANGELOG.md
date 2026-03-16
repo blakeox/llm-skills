@@ -9,6 +9,17 @@ This repository was expanded from a skill library into a fuller Copilot operatin
 - `skills/ux-designer/`
 - `skills/ui-designer/`
 
+### Added provider-specific shipping lanes
+
+- `skills/cloudflare-ship/`
+- `skills/apple-ship/`
+- `skills/google-cloud-ship/`
+- `skills/azure-ship/`
+- `.github/agents/cloudflare-ship.agent.md`
+- `.github/agents/apple-ship.agent.md`
+- `.github/agents/google-cloud-ship.agent.md`
+- `.github/agents/azure-ship.agent.md`
+
 ### Added custom agents
 
 - `orchestrator.agent.md`
@@ -71,6 +82,7 @@ This repository was expanded from a skill library into a fuller Copilot operatin
 ### Added operational maturity support
 
 - `VERSION`
+- bumped to `0.2.0` for provider-specific shipping support
 
 ### Added evaluation harness
 

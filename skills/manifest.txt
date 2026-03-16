@@ -1,6 +1,10 @@
 _house-style
 api-review
+apple-ship
+azure-ship
+cloudflare-ship
 dep-audit
+google-cloud-ship
 onboarding-audit
 paranoid-review
 plan-eng-review

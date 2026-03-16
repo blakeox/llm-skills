@@ -12,7 +12,11 @@ It also now includes **Copilot routing instructions** and **phase prompt templat
 
 - `_house-style`
 - `api-review`
+- `apple-ship`
+- `azure-ship`
+- `cloudflare-ship`
 - `dep-audit`
+- `google-cloud-ship`
 - `onboarding-audit`
 - `paranoid-review`
 - `plan-eng-review`
@@ -25,7 +29,7 @@ It also now includes **Copilot routing instructions** and **phase prompt templat
 - `ui-designer`
 - `ux-designer`
 
-These are the ICCI-originated skills currently approved for publication in this repository.
+These are the published skills currently included in this repository.
 
 ## Custom agent bundles
 
@@ -49,6 +53,10 @@ The `.github/agents/` directory contains opinionated agent profiles that bundle 
 - `designer.agent.md` — `ux-designer` + `ui-designer`
 - `accessibility.agent.md` — keyboard, screen-reader, semantics, and inclusive-interaction specialist
 - `product-design-review.agent.md` — orchestration layer for `ux-designer` + `ui-designer`
+- `cloudflare-ship.agent.md` — Cloudflare-specific ship and rollout specialist
+- `apple-ship.agent.md` — Apple/TestFlight/App Store release specialist
+- `google-cloud-ship.agent.md` — Google Cloud-specific release specialist
+- `azure-ship.agent.md` — Azure-specific release specialist
 
 Important nuance: skills are still selected by relevance. The custom agents do not hard-pin a skill in the Copilot runtime. Instead, their prompts tell Copilot which skills to lean on for that role.
 
@@ -68,6 +76,10 @@ With these additions, the repo is no longer only review-oriented. It now has a f
 - stabilize with `The Reliability Engineer`
 - migrate with `The Migration Engineer`
 - protect contracts with `The Contract Tester`
+- ship on Cloudflare with `The Cloudflare Shipper`
+- ship on Apple platforms with `The Apple Shipper`
+- ship on Google Cloud with `The Google Cloud Shipper`
+- ship on Azure with `The Azure Shipper`
 - gate with `The Enforcer`
 
 ### Recommended `/fleet` pattern
@@ -80,6 +92,7 @@ For a new feature:
 - Test/hardening phase: `The Tester`, `The Breaker`
 - Security/performance/reliability/migration phase: `The Security Engineer`, `The Performance Engineer`, `The Reliability Engineer`, `The Migration Engineer`, `The Contract Tester` as needed
 - Pre-merge phase: `The Enforcer`, `The Builder`
+- Provider release phase: relevant platform shipper + `The Enforcer`
 - Post-incident or periodic review: `The Investigator`
 
 ### Orchestrator-first usage
@@ -145,6 +158,10 @@ Use this as the quick "who should I call?" reference.
 | Schema/data/API transition | `The Migration Engineer` | `The Migration Engineer` + `The Architect` + `The Contract Tester` + `The Enforcer` |
 | Consumer-facing API/schema change | `The Contract Tester` | `The Builder` + `The Contract Tester` + `The Enforcer` |
 | Final ship gate | `The Enforcer` | `The Builder` + `The Enforcer` |
+| Cloudflare release or edge rollout | `The Cloudflare Shipper` | `The Cloudflare Shipper` + `The Enforcer` |
+| Apple/TestFlight/App Store release | `The Apple Shipper` | `The Apple Shipper` + `The Enforcer` |
+| Google Cloud release or rollout | `The Google Cloud Shipper` | `The Google Cloud Shipper` + `The Enforcer` |
+| Azure release or slot/revision rollout | `The Azure Shipper` | `The Azure Shipper` + `The Enforcer` |
 | Incident / retro / debt learning | `The Investigator` | `The Investigator` + `The Architect` + `The Reliability Engineer` |
 
 ## Overlap rules
@@ -339,14 +356,18 @@ llm-skills/
 │   ├── copilot-instructions.md
 │   ├── agents/
 │   │   ├── accessibility.agent.md
+│   │   ├── apple-ship.agent.md
 │   │   ├── architect.agent.md
+│   │   ├── azure-ship.agent.md
 │   │   ├── breaker.agent.md
 │   │   ├── builder.agent.md
+│   │   ├── cloudflare-ship.agent.md
 │   │   ├── contract-tester.agent.md
 │   │   ├── debugger.agent.md
 │   │   ├── designer.agent.md
 │   │   ├── enforcer.agent.md
 │   │   ├── executor.agent.md
+│   │   ├── google-cloud-ship.agent.md
 │   │   ├── investigator.agent.md
 │   │   ├── migration.agent.md
 │   │   ├── orchestrator.agent.md
@@ -399,7 +420,11 @@ llm-skills/
     ├── manifest.txt
     ├── _house-style/
     ├── api-review/
+    ├── apple-ship/
+    ├── azure-ship/
+    ├── cloudflare-ship/
     ├── dep-audit/
+    ├── google-cloud-ship/
     ├── onboarding-audit/
     ├── paranoid-review/
     ├── plan-eng-review/

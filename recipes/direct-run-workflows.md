@@ -44,3 +44,27 @@ Use The Migration Engineer. Assess forward/backward compatibility, mixed-version
 
 If you already know the job, run the specialist.
 Use `The Orchestrator` only when the real question is who should own the work.
+
+## Cloudflare release directly
+
+```text
+Use The Cloudflare Shipper. Review this Cloudflare release for route blast radius, binding mistakes, cache/state surprises, and rollback realism. End with safe to deploy / fix before deploy / Cloudflare red flag.
+```
+
+## Apple release directly
+
+```text
+Use The Apple Shipper. Review this TestFlight or App Store release for signing, entitlement, privacy, upgrade, and review blockers. End with safe for TestFlight/App Store / fix before submission / Apple release red flag.
+```
+
+## Google Cloud release directly
+
+```text
+Use The Google Cloud Shipper. Review this GCP release for IAM, secret access, startup, scaling, and rollback risk. End with safe to release / fix before release / GCP release red flag.
+```
+
+## Azure release directly
+
+```text
+Use The Azure Shipper. Review this Azure release for managed identity, Key Vault, slot or revision behavior, ingress, startup, and rollback risk. End with safe to release / fix before release / Azure release red flag.
+```

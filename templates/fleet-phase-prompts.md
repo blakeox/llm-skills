@@ -143,3 +143,36 @@ Use when keyboard behavior, semantics, focus handling, contrast, motion, or scre
 ```text
 Run an accessibility review on this UI change. Use The Accessibility Engineer to audit keyboard access, focus order, semantics, announcements, validation, motion, and recovery from errors. Pair with The Designer if the usability and accessibility questions are intertwined.
 ```
+
+
+## 19. Cloudflare release phase
+
+Use when shipping Workers, Pages, routes, bindings, KV/R2/D1 changes, or other Cloudflare edge infrastructure.
+
+```text
+Run a Cloudflare release review. Use The Cloudflare Shipper to audit bindings, routes, stateful resources, cache behavior, and rollback realism. Finish with The Enforcer if this is the final production gate.
+```
+
+## 20. Apple release phase
+
+Use when shipping an iOS or macOS build through TestFlight or the App Store.
+
+```text
+Run an Apple release review. Use The Apple Shipper to audit signing, entitlements, privacy disclosures, upgrade risk, and App Review-sensitive behavior. Finish with The Enforcer if you want one final ship gate.
+```
+
+## 21. Google Cloud release phase
+
+Use when shipping to Cloud Run, GKE, App Engine, or other GCP runtime surfaces.
+
+```text
+Run a Google Cloud release review. Use The Google Cloud Shipper to audit IAM, service accounts, secret access, startup behavior, autoscaling assumptions, and rollback realism. Finish with The Enforcer if this is the final release gate.
+```
+
+## 22. Azure release phase
+
+Use when shipping to App Service, Functions, Container Apps, AKS, slots, or other Azure runtime surfaces.
+
+```text
+Run an Azure release review. Use The Azure Shipper to audit managed identity, Key Vault access, app settings, slot or revision behavior, ingress, and rollback realism. Finish with The Enforcer if this is the final release gate.
+```
