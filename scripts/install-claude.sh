@@ -65,7 +65,24 @@ done
 
 echo
 
-# --- Step 4: Create settings.json if missing ---
+# --- Step 4: Install hooks ---
+
+HOOKS_SOURCE="$REPO_DIR/claude/hooks"
+HOOKS_DIR="$CLAUDE_DIR/hooks"
+mkdir -p "$HOOKS_DIR"
+
+if [[ -d "$HOOKS_SOURCE" ]]; then
+  for hook_file in "$HOOKS_SOURCE"/*.sh; do
+    name="$(basename "$hook_file")"
+    cp "$hook_file" "$HOOKS_DIR/$name"
+    chmod +x "$HOOKS_DIR/$name"
+    echo "Installed hook: $name"
+  done
+fi
+
+echo
+
+# --- Step 5: Create settings.json if missing ---
 
 SETTINGS_FILE="$CLAUDE_DIR/settings.json"
 if [[ ! -f "$SETTINGS_FILE" ]]; then
@@ -84,7 +101,7 @@ fi
 
 echo
 
-# --- Step 5: Create CLAUDE.md if missing ---
+# --- Step 6: Create CLAUDE.md if missing ---
 
 CLAUDE_MD="$CLAUDE_DIR/CLAUDE.md"
 if [[ ! -f "$CLAUDE_MD" ]]; then
@@ -99,6 +116,7 @@ echo "Install complete."
 echo "  Skills:   symlinked to $SKILLS_TARGET/"
 echo "  Agents:   copied to $AGENTS_TARGET/"
 echo "  Rules:    copied to $RULES_DIR/"
+echo "  Hooks:    copied to $HOOKS_DIR/"
 echo "  Settings: $SETTINGS_FILE"
 echo "  CLAUDE.md: $CLAUDE_MD"
 echo
