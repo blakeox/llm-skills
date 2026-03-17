@@ -34,6 +34,45 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/commit-check.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block-destructive.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/stop-verify.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/context-recovery.sh"
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/teammate-gate.sh",
+            "timeout": 120
           }
         ]
       }
