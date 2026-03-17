@@ -52,20 +52,54 @@ done
 
 echo
 
-# --- Step 3: Install house-style rule ---
+# --- Step 3: Install rules ---
 
 RULES_DIR="$CLAUDE_DIR/rules"
 mkdir -p "$RULES_DIR"
 
-if [[ -f "$REPO_DIR/claude/rules/house-style.md" ]]; then
-  cp "$REPO_DIR/claude/rules/house-style.md" "$RULES_DIR/house-style.md"
-  echo "Installed rule: house-style.md"
+for rule_file in "$REPO_DIR"/claude/rules/*.md; do
+  name="$(basename "$rule_file")"
+  cp "$rule_file" "$RULES_DIR/$name"
+  echo "Installed rule: $name"
+done
+
+echo
+
+# --- Step 4: Create settings.json if missing ---
+
+SETTINGS_FILE="$CLAUDE_DIR/settings.json"
+if [[ ! -f "$SETTINGS_FILE" ]]; then
+  cp "$REPO_DIR/claude/settings.json.example" "$SETTINGS_FILE"
+  echo "Created settings.json from template (agent teams enabled)"
+else
+  # Check if agent teams env var is set
+  if ! grep -q "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" "$SETTINGS_FILE" 2>/dev/null; then
+    echo "NOTE: Agent teams not enabled in your settings.json."
+    echo "  Add this to your settings.json under \"env\":"
+    echo "    \"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS\": \"1\""
+  else
+    echo "settings.json exists (not overwritten)"
+  fi
+fi
+
+echo
+
+# --- Step 5: Create CLAUDE.md if missing ---
+
+CLAUDE_MD="$CLAUDE_DIR/CLAUDE.md"
+if [[ ! -f "$CLAUDE_MD" ]]; then
+  cp "$REPO_DIR/claude/CLAUDE.md.example" "$CLAUDE_MD"
+  echo "Created ~/.claude/CLAUDE.md from template"
+else
+  echo "CLAUDE.md exists (not overwritten)"
 fi
 
 echo
 echo "Install complete."
-echo "  Skills: symlinked to $SKILLS_TARGET/"
-echo "  Agents: copied to $AGENTS_TARGET/"
-echo "  Rules: copied to $RULES_DIR/"
+echo "  Skills:   symlinked to $SKILLS_TARGET/"
+echo "  Agents:   copied to $AGENTS_TARGET/"
+echo "  Rules:    copied to $RULES_DIR/"
+echo "  Settings: $SETTINGS_FILE"
+echo "  CLAUDE.md: $CLAUDE_MD"
 echo
 echo "Start a new Claude Code session to pick up the changes."
