@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.10.0 — Skill bench consolidation and hardening
+
+### Consolidated provider release skills
+
+- replaced seven duplicated provider skills with `platform-ship` and conditional Apple, AWS, Azure, Cloudflare, Google Cloud, Supabase, and Vercel references
+- retained provider-specific agents as focused routers through the consolidated release contract
+- added ownership-checked cleanup for retired Codex skill directories
+
+### Added operational review lanes
+
+- added `security-review`, `migration-review`, and `reliability-review`
+- added DevEx planning and live-review skills
+- added a read-only `parallel-review operational-risk` mode
+
+### Hardened evidence and execution contracts
+
+- added shared finding, active-testing, and release-gate contracts
+- separated parallel diagnosis from sequential mutation and added dirty-worktree, secret, deletion, and external-action safeguards
+- corrected unsupported accessibility, personnel, incident, test-diagnosis, and estimate claims
+- reduced large skill entrypoints through conditional references and narrowed `section-review`
+
+### Added validation and Codex-native installation
+
+- added deterministic Codex rendering, UI metadata generation, ownership protection, install verification, and retired-skill cleanup
+- added manifest, reference, trigger-case, line-budget, retired-invocation, README, and generated-YAML checks
+- added positive and negative trigger cases for every published skill and adversarial forward tests for the highest-risk workflows
+
+Migration: replace provider-specific skill invocations with `/platform-ship <provider>` or `$platform-ship <provider>`. Provider-specific agents remain available.
+
 ## 0.7.0 — OpenClaw, Claude Code, and Codex integration
 
 ### Added OpenClaw support
@@ -40,10 +69,10 @@ All platforms share the same skill bench from `skills/`. Platform-specific wirin
 
 ### Previous build-out
 
-This repository was expanded from a skill library into a fuller Copilot operating system with specialist agents, routing guidance, examples, and evaluation support.
-
 ### Added skills
 
+- `skills/plan-devex-review/`
+- `skills/devex-review/`
 - `skills/ux-designer/`
 - `skills/ui-designer/`
 
@@ -126,7 +155,7 @@ This repository was expanded from a skill library into a fuller Copilot operatin
 ### Added operational maturity support
 
 - `VERSION`
-- bumped to `0.6.0` for expanded provider-specific shipping and cross-tool setup support
+- bumped to `0.8.0` for README sync automation, shared-repo bootstrap support, and the DevEx review lane
 
 ### Added evaluation harness
 

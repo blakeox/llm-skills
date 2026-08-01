@@ -135,9 +135,22 @@ openclaw gateway restart
 git clone https://github.com/blakeox/llm-skills.git ~/Documents/GitHub/llm-skills
 cd ~/Documents/GitHub/llm-skills
 ./scripts/install-codex.sh
+./scripts/verify-codex-skills.sh
 ```
 
-This symlinks all skills and agent-as-skills into `~/.codex/skills/`. Restart Codex to pick them up.
+This validates the source bench and renders repository-owned Codex-native copies into `~/.codex/skills/`. It normalizes frontmatter, converts cross-tool skill invocations to `$skill`, generates `agents/openai.yaml`, and refuses to overwrite unowned directories. Restart Codex to pick them up.
+
+### Provider skill migration
+
+Version `0.10.0` consolidates provider-specific skill commands into `platform-ship`:
+
+```text
+$platform-ship AWS production release
+$platform-ship Cloudflare Worker release
+$platform-ship Apple App Store submission
+```
+
+Provider-specific agents remain available and route through the consolidated skill. Retired Codex directories are removed only when their repository ownership marker matches exactly.
 
 ### Update later
 
@@ -145,6 +158,7 @@ This symlinks all skills and agent-as-skills into `~/.codex/skills/`. Restart Co
 cd ~/Documents/GitHub/llm-skills
 git pull
 ./scripts/install-codex.sh
+./scripts/verify-codex-skills.sh
 ```
 
 ## Verify manually
@@ -170,3 +184,4 @@ ls ~/.codex/skills
 - Skills are the shared vocabulary across all platforms.
 - Agents are platform-specific wrappers that compose skills into specialist roles.
 - The orchestrator (available on all platforms) routes tasks to the right specialist(s).
+- `scripts/validate-skill-bench.py` rejects stale skill entrypoints, manifest drift, broken references, retired invocations, oversized entrypoints, and missing trigger cases.

@@ -21,6 +21,8 @@ Use it to answer:
 4. Compare it to the golden shape in `examples/`.
 5. If the answer is weak, improve the prompt, routing, or docs.
 
+For trigger testing, use `eval/trigger-cases.json`. Run each positive and negative prompt in a fresh context, record which skill triggered, and measure precision separately from output quality. `scripts/validate-skill-bench.py` requires both polarities for every published skill.
+
 ## What success looks like
 
 A good result:

@@ -1,76 +1,82 @@
 ---
 name: retro
-description: Brutally honest engineering retrospective. Analyzes git history for what actually happened — not what people think happened. Gives blunt, specific, data-backed feedback per contributor. No vibes, only data.
+description: Evidence-backed engineering retrospective grounded in delivery artifacts. Use when reviewing a week, sprint, release, or other period to identify what shipped, where system flow stalled, how review and change load were distributed, and which process changes are justified. Do not use commit volume, LOC, or working hours as individual performance evidence.
 user-invocable: true
 argument-hint: "[time range, e.g. 'last week', 'last 2 weeks', 'march']"
 ---
 
 Read `../_house-style/house-style.md` before starting.
 
-## Anchor phrases
+## Evidence boundary
 
-- Git is the source of truth. Not memory. Not standups. Not Slack.
-- More commits does not mean more output. More LOC does not mean more value.
-- "Great job everyone" is not feedback. It's the absence of feedback.
-- Specific praise builds trust. Vague praise builds nothing.
+Git is one delivery artifact, not the source of truth about effort, performance, intent, or wellbeing. Pull-request, issue, CI, incident, and deployment claims require those systems; do not infer them from commits.
 
-## Domain-specific examples
+Do not:
 
-**Contributor feedback — wrong way:**
+- rank people by commits, LOC, test ratio, active days, or timestamps
+- infer burnout, productivity, availability, or motivation
+- turn individual attribution into performance evaluation
+- expose personal data, credentials, customer payloads, or sensitive internal identifiers
 
-"Alice had a productive week with lots of commits. She's doing great work on the payment system. Keep it up!"
-
-**Contributor feedback — right way:**
-
-"**Alice** — 12 commits, +1.8k LOC, 8% test ratio, 3 PRs. All PRs under 200 LOC — disciplined. Shipped the Stripe webhook handler (`app/services/webhooks/stripe.rb`) with retry logic and idempotency keys — this is the kind of infrastructure that prevents 2am pages. **Growth opportunity:** test ratio at 8% on payment code is a liability. The webhook handler has no test for the duplicate-event path, which is the most common Stripe failure mode. Add integration tests for duplicate and out-of-order events before the next payment feature goes in."
-
-**Team observation — wrong way:**
-
-"Overall a productive week. We should try to write more tests and do code reviews faster."
-
-**Team observation — right way:**
-
-"14 PRs merged, 3 sat open for over 48 hours (PRs #89, #92, #94 — all waiting on Bob's review). Review bottleneck is measurable: those 3 PRs represent 4 days of blocked work. Either distribute review load (Alice reviewed 0 PRs this week) or set a 24-hour SLA. Test ratio dropped from 34% to 28% week-over-week. The decline is entirely in `app/services/` — 6 new service files, 0 test files. This is debt accumulating in the most critical layer."
+Use names only when the user explicitly requests legitimate attribution and the source supports it. Default to roles, workflow stages, and system conditions.
 
 ## Data collection
 
-From git history for the requested range:
+For the requested range, collect only accessible, relevant artifacts:
 
-**Per-contributor:** commits, LOC +/-, files touched, test LOC %, PR count/size, fix/revert ratio, active days, peak hours (from timestamps).
+- shipped changes and affected product/system areas
+- change size and hotspots, without treating size as value
+- review and merge latency from forge data when available
+- CI failures, reverts, incident links, and deployment outcomes
+- unresolved or repeatedly reopened work
+- concentration risk in components, review queues, or ownership
 
-**Team-level:** total commits/LOC/PRs, hotspot files, biggest ship, revert ratio, test ratio.
+Label each datum `Measured`, `Source-backed`, `Inferred`, or `Unavailable`. Do not fill missing forge or planning data from git guesses.
 
-**Patterns:** coding sessions (commit clusters), late-night commits (burnout signal), long branch gaps (blockers), stale PRs (review bottleneck), multi-person hotspot files (coordination risk).
+## Analysis
+
+### 1. Delivery outcomes
+
+What reached users or operations? Separate merged, deployed, released, and merely committed work.
+
+### 2. Flow constraints
+
+Where did work wait, loop, fail, or require manual recovery? Name the evidence and system condition. Do not call a person a bottleneck without corroborating workflow evidence and relevant context.
+
+### 3. Quality signals
+
+Examine reverts, recurring CI failures, incident links, missing proof on high-risk changes, and hotspot concentration. State what the artifacts cannot prove.
+
+### 4. Control and ownership gaps
+
+Identify unclear review ownership, missing automated gates, fragile single-owner components, and shadow processes. Recommend a role or control, not a personal judgment.
 
 ## Output format
 
 ### Period summary
-One paragraph: what shipped, in numbers. Not what was planned.
 
-### Biggest wins
-Top 3. Specific: what, who, why it matters. From git.
+What shipped and what did not, with evidence classes.
 
-### Biggest problems
-Top 3. Blunt. Evidence from git.
+### Outcomes worth preserving
 
-### Per-contributor breakdown
-For each:
-- **Stats:** commits, LOC, test ratio, PRs, active days, peak hours
-- **What they shipped:** specific, from git
-- **What went well:** specific praise with evidence
-- **Growth opportunity:** specific, actionable, engineering-practice-level
+Up to three specific delivery or control outcomes and why they mattered.
 
-### Hotspots
-Most-modified files. Who touched them, how often, test coverage.
+### System constraints
 
-### Risks
-Trends: test coverage direction, PR size growth, bus factor changes, dep update freshness.
+Up to three evidence-backed flow, quality, or ownership problems. Use the shared finding contract.
 
-### Three things to change
-Specific, owned: what, who, by when, how you verify.
+### Hotspots and concentration risk
+
+Components, queues, or review surfaces with repeated change or unresolved ownership. Do not equate LOC with value.
+
+### Three changes
+
+Dependency-ordered actions. Name the responsible role if known and the verification condition. Do not invent a person or deadline.
 
 ### Devil's advocate
-For your harshest per-person feedback: could external factors explain it? Blockers you don't see in git?
 
-### What I didn't check
-Context I can't get from git: meetings, planning, blocked-on-others time.
+What planning, coordination, support, or external context could change the strongest conclusion?
+
+### What I didn't verify
+
+Missing planning context, inaccessible forge/CI/deploy data, unobserved work, and the evidence needed to close each gap.

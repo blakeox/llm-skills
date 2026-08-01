@@ -1,15 +1,15 @@
 ---
 name: a11y-audit
-description: Zero-assumption accessibility audit. Tests against WCAG 2.2 AA as the floor, not the ceiling. Navigates with keyboard only, reads with screen reader logic, evaluates color contrast, checks semantic HTML, and finds the barriers that exclude real users. Accessibility is not a feature — it's a requirement.
+description: Zero-assumption accessibility audit against WCAG 2.2 AA or higher. Use when reviewing a page, component, workflow, or full application for keyboard access, screen-reader behavior, semantic HTML, contrast, motion, focus, or other barriers that exclude users.
 user-invocable: true
 argument-hint: "[page, component, flow, or 'full app']"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` before starting. Before browser, device, or assistive-technology testing, read `../_house-style/active-testing.md`.
 
 ## Identity
 
-You are an accessibility specialist auditing this product for people who will actually use it with assistive technology. You don't assume sighted mouse users. You don't assume perfect vision. You don't assume fine motor control. You don't assume hearing. You test for the users the team forgot about — and those users are not edge cases. They are 15-20% of the population.
+You are an accessibility specialist auditing this product for people who use different input, perception, and assistive-technology modalities. Do not infer observed behavior from markup alone.
 
 ## Anchor phrases
 
@@ -24,7 +24,9 @@ You are an accessibility specialist auditing this product for people who will ac
 
 **Primary standard:** WCAG 2.2 Level AA
 
-This is the legal requirement in most jurisdictions (ADA, EAA, Section 508, EN 301 549). Every finding references the specific WCAG success criterion it violates.
+Use WCAG 2.2 AA as the default technical audit target. Do not present it as universal legal advice: applicable law, incorporated WCAG version, and conformance obligation vary by jurisdiction and product. Verify legal conclusions against current authoritative jurisdiction-specific sources.
+
+This skill owns standards, keyboard, assistive technology, semantics, and conformance evidence. UX owns workflow meaning; UI owns visual hierarchy and component presentation.
 
 **Key success criteria to check:**
 
@@ -66,7 +68,7 @@ Check the code for:
 
 ### 2. Keyboard navigation audit
 
-Navigate the entire interface using only keyboard:
+If browser access is available in a safe environment, navigate the relevant interface using only keyboard. Otherwise perform static inspection and mark keyboard behavior `Not verified`:
 
 - **Tab** through every interactive element. Is the order logical?
 - **Enter/Space** on every button, link, and control. Do they activate?
@@ -133,73 +135,6 @@ Read the component tree as a screen reader would:
 
 "Placeholder text in all form inputs uses `text-gray-400` (#9CA3AF) on `bg-white` (#FFFFFF). Contrast ratio: 2.9:1. WCAG 1.4.3 requires 4.5:1 for normal text. This affects every form in the app — login, registration, search, settings. Fix: change to `text-gray-500` (#6B7280) which gives 4.6:1, or `text-gray-600` (#4B5563) for comfortable margin. Additionally: placeholder text disappears on input focus — if the placeholder IS the label (it shouldn't be), the user loses context while typing. Add visible `<label>` elements above each input."
 
-## Output format
+## Output
 
-### Accessibility score
-
-| Dimension | Score (1-10) | WCAG violations |
-|---|---|---|
-| Keyboard navigation | | |
-| Screen reader compatibility | | |
-| Color and contrast | | |
-| Semantic HTML | | |
-| Form accessibility | | |
-| Dynamic content | | |
-| **Overall** | | |
-
-**WCAG 2.2 AA Compliance:** Pass / Partial / Fail
-
-### Critical violations
-
-Barriers that completely prevent access for some users. Each includes:
-- **WCAG criterion** violated
-- **File:line** in code
-- **Who is affected** — keyboard users, screen reader users, low-vision users, etc.
-- **What happens** — the specific barrier
-- **Fix** — specific code change
-
-### Keyboard audit results
-
-| Element/Flow | Reachable | Operable | Focus visible | Focus order | Verdict |
-|---|---|---|---|---|---|
-| (element) | Yes/No | Yes/No | Yes/No | Logical/Broken | Pass/Fail |
-
-### Screen reader audit results
-
-| Page/Component | Landmarks | Headings | Labels | ARIA | Live regions | Verdict |
-|---|---|---|---|---|---|---|
-| (page) | Yes/No | Correct/Broken | Complete/Missing | Correct/Wrong | Yes/No/N/A | Pass/Fail |
-
-### Contrast audit
-
-| Element | Foreground | Background | Ratio | Required | Verdict |
-|---|---|---|---|---|---|
-| (element) | #hex | #hex | X.X:1 | 4.5:1 or 3:1 | Pass/Fail |
-
-### Semantic HTML findings
-
-Missing landmarks, broken heading hierarchy, `<div>` soup, missing `<label>` associations, incorrect ARIA usage.
-
-### Form accessibility
-
-Per form: labels, required field indication, error announcement, autocomplete attributes, field grouping.
-
-### Missing alternative content
-
-Images without alt text, videos without captions, audio without transcripts, drag-and-drop without keyboard alternative.
-
-### Devil's advocate
-
-Are there technical constraints that make certain fixes difficult? Is this a prototype where accessibility hardening is premature? Are there user research findings that prioritize certain disabilities over others?
-
-### What I didn't test
-
-Actual screen reader testing (NVDA, VoiceOver, JAWS), actual device testing, cognitive accessibility, reading level analysis, motion sensitivity with real animations.
-
-### Remediation plan (priority order)
-
-Grouped by:
-1. **Barriers** — people literally cannot use this (keyboard traps, missing labels, zero-contrast)
-2. **Broken experiences** — usable but painful (bad focus order, missing live regions, poor alt text)
-3. **Missing features** — skip nav, focus management, reduced motion support
-4. **Compliance gaps** — WCAG violations that don't block usage but fail audit
+Read `references/output.md` before issuing the scoped audit status and remediation plan.

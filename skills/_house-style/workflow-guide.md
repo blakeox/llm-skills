@@ -5,12 +5,15 @@
 | Skill | When to use | Cognitive mode |
 |---|---|---|
 | `/plan-product-review` | Before deciding what to build | Is this the right thing? |
+| `/plan-devex-review` | Before building a developer-facing surface | Is the proposed developer journey coherent? |
 | `/plan-eng-review` | After product direction is locked | Is the architecture sound? |
 | `/execute` | Time to write code | Build it, fix it, refactor it, delete it |
 | `/section-review` | Reviewing existing code/UI in depth | What's the real quality? |
+| `/parallel-review` | Several independent read-only reviews are justified | What survives synthesis? |
 | `/paranoid-review` | Before merging a branch | Will this survive production? |
 | `/ship` | Branch is ready, land it | Pass the gate or fix it |
 | `/api-review` | Reviewing API design | Use it, then break it |
+| `/devex-review` | Reviewing an API, CLI, SDK, docs, or platform journey | Can a developer reach first value? |
 | `/ux-designer` | Evaluating user experience | Can a real user do their job? |
 | `/ui-designer` | Evaluating visual design | Does it look right and feel consistent? |
 | `/a11y-audit` | Accessibility compliance | Can everyone use this? |
@@ -22,6 +25,10 @@
 | `/onboarding-audit` | New project setup, periodic check | Can a stranger get this running? |
 | `/postmortem` | After an incident | What happened and why did we allow it? |
 | `/retro` | End of week/sprint | What actually happened? (git, not vibes) |
+| `/security-review` | Exposed surface or trust-boundary review | Is there a reachable exploit or abuse path? |
+| `/migration-review` | Schema, data, API, or event transition | Can old and new states coexist and recover? |
+| `/reliability-review` | Failure-prone service, job, queue, or workflow | Is failure bounded, detectable, and recoverable? |
+| `/platform-ship` | Apple, AWS, Azure, Cloudflare, Google Cloud, Supabase, or Vercel release evidence | Is the provider release provably ready? |
 
 ## Feature lifecycle
 
@@ -78,6 +85,9 @@ Use these when you need focused analysis on a specific area.
 |---|---|
 | "This section feels wrong" | `/section-review [section]` |
 | "Is our API well-designed?" | `/api-review [routes]` |
+| "Can this be exploited?" | `/security-review [surface]` |
+| "Can this migration roll safely?" | `/migration-review [transition]` |
+| "What happens when this dependency fails?" | `/reliability-review [path]` |
 | "We keep having bugs in X" | `/section-review [X]` then `/tech-debt [X]` |
 | "New hire couldn't get set up" | `/onboarding-audit` |
 
@@ -93,6 +103,7 @@ Use these when you need focused analysis on a specific area.
 | `post-incident` | `/postmortem` + `/retro` + `/paranoid-review` | After any outage |
 | `test` | `/test-audit` + `/test-write` + `/test-fix` | Test suite overhaul |
 | `design` | `/ux-designer` + `/ui-designer` + `/a11y-audit` | Full frontend quality audit |
+| `operational-risk` | `/security-review` + `/migration-review` + `/reliability-review` | Exposed, stateful, or distributed change |
 
 Usage:
 
@@ -103,6 +114,7 @@ Usage:
 /parallel-review post-incident #incident-47
 /parallel-review test src/
 /parallel-review design src/components/
+/parallel-review operational-risk feature/payments
 ```
 
 The coordinator deduplicates findings across reviewers, resolves severity conflicts (takes the higher), surfaces contradictions, and produces a single prioritized report with a combined verdict.
@@ -116,12 +128,15 @@ Skills are more powerful in sequence:
 - **Dep audit → Paranoid review** — audit deps, then review the code that uses them
 - **Postmortem → Retro** — investigate the incident, then zoom out to the week
 - **Onboarding audit → Tech debt** — friction points often reveal structural debt
-- **Test audit → Test write → Test fix** — audit quality, fill gaps, fix what's broken
+- **Test audit → Test fix → Test write** — diagnose existing failures first, then add missing proof sequentially
 - **Paranoid review → Test write** — review finds bugs, tests prevent recurrence
 - **Execute build → Parallel review test** — build the feature, then verify the tests are real
 - **UX review → UI review → A11y audit** — flows, then visuals, then compliance
 - **Parallel review design → Execute fix** — find all frontend issues, then fix them
 - **A11y audit → Execute fix → Ship** — accessibility compliance before shipping
+- **Security review → Test write → Execute fix** — prove the exploit path, preserve it as a regression, then correct it
+- **Migration review → Platform ship** — settle coexistence and recovery before provider promotion
+- **Reliability review → Platform ship** — prove failure controls before release evidence is accepted
 
 ## When NOT to use a skill
 
@@ -129,4 +144,4 @@ Skills are more powerful in sequence:
 - Don't use `/paranoid-review` on a prototype. Use `/section-review` with prototype stage instead.
 - Don't use `/ship` before `/paranoid-review`. The gate checks hygiene, not correctness.
 - Don't use `/retro` mid-sprint for planning. It looks backward, not forward.
-- Don't use `/postmortem` for near-misses that didn't impact users. Use `/paranoid-review` on the code instead.
+- Use `/postmortem` for material near misses when the evidence can reveal a control failure; use `/paranoid-review` for a code-only risk review without incident reconstruction.

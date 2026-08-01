@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 MANIFEST="$REPO_DIR/skills/manifest.txt"
-CLAUDE_DIR="${HOME}/.claude"
+CLAUDE_DIR="${1:-${HOME}/.claude}"
 
 echo "LLM Skills — Claude Code installer"
 echo "Bundle version: $(cat "$REPO_DIR/VERSION")"
@@ -14,6 +14,17 @@ echo
 
 SKILLS_TARGET="$CLAUDE_DIR/skills"
 mkdir -p "$SKILLS_TARGET"
+
+# Remove only retired symlinks created by this repository's older installer.
+for target in "$SKILLS_TARGET"/*; do
+  [[ -L "$target" ]] || continue
+  name="$(basename "$target")"
+  link="$(readlink "$target")"
+  if [[ "$link" == "$REPO_DIR/skills/"* ]] && ! grep -Fxq "$name" "$MANIFEST"; then
+    rm "$target"
+    echo "Removed retired skill link: $name"
+  fi
+done
 
 while IFS= read -r skill || [[ -n "$skill" ]]; do
   [[ -z "$skill" ]] && continue

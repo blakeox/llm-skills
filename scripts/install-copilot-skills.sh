@@ -11,6 +11,8 @@ if [[ ! -f "$MANIFEST" ]]; then
   exit 1
 fi
 
+python3 "$REPO_DIR/scripts/validate-skill-bench.py"
+
 mkdir -p "$TARGET_DIR"
 
 while IFS= read -r skill || [[ -n "$skill" ]]; do

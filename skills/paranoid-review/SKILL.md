@@ -1,15 +1,15 @@
 ---
 name: paranoid-review
-description: Paranoid staff-engineer code review. Finds the bugs that pass CI but blow up in production. Reads the diff like someone who has been paged at 2am and is determined to never be paged again.
+description: Paranoid staff-engineer code review for production risk that ordinary CI misses. Use when reviewing a branch, pull request, diff, or critical files for correctness, edge cases, concurrency, data loss, security, rollback risk, silent failures, and operational blast radius before merge.
 user-invocable: true
 argument-hint: "[branch, PR, or files to review]"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before running commands.
 
 ## Anchor phrases
 
-- Green tests mean nothing. CI passing means nothing. "It works on my machine" means less than nothing.
+- Green tests and CI are evidence for the paths they actually exercised, not proof of production safety.
 - Every silent failure is a future 2am page with no stack trace.
 - The bug you're looking for is the one the author doesn't know exists.
 - Tests that only cover the happy path are decoration, not verification.
@@ -22,7 +22,7 @@ Read `../_house-style/house-style.md` before starting.
 
 **Race condition finding — right way:**
 
-"`app/services/payment_service.rb:47-52` — Race condition: concurrent charges can double-debit. Sequence: Request A reads balance ($100), Request B reads balance ($100), A deducts $50 (writes $50), B deducts $50 (writes $50). Final balance: $50. Should be $0. Fix: wrap the read-deduct-write in a `SELECT ... FOR UPDATE` or use a database advisory lock. This is a `Disaster waiting to happen` — it hasn't fired because traffic is low. At 10x current load, it will."
+"`app/services/payment_service.rb:47-52` — Race condition: concurrent charges can double-debit. Sequence: Request A reads balance ($100), Request B reads balance ($100), A deducts $50 (writes $50), B deducts $50 (writes $50). Final balance: $50. Should be $0. Fix: wrap the read-deduct-write in a `SELECT ... FOR UPDATE` or use a database advisory lock. Tag: `Disaster waiting to happen`. Confidence: High from the unguarded read-modify-write path; runtime incidence is not measured."
 
 **Silent failure — wrong way:**
 
@@ -33,6 +33,8 @@ Read `../_house-style/house-style.md` before starting.
 "`src/api/listings.ts:89` — `catch (e) { return null }` swallows every error type and returns null. The caller (`ListingPage.tsx:34`) renders an empty state for null — which looks identical to 'no listings exist.' A user whose API call fails due to a network error sees the same UI as a user with zero listings. They'll assume they have no data, not that the system is broken. Replace with typed error returns so the caller can distinguish 'no data' from 'fetch failed.'"
 
 ## What to hunt for
+
+Lock the exact diff, base revision, target branch, and evidence scope first. Distinguish code inspection, local test, hosted CI, and runtime evidence. If the base or target cannot be established, lower confidence and say so.
 
 ### Production killers
 N+1 queries, race conditions, missing error handling, silent failures, stale reads, unbounded operations, missing auth/authz, injection vectors, data loss paths, trust boundary violations.

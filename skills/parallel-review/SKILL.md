@@ -1,11 +1,11 @@
 ---
 name: parallel-review
-description: Orchestrate multiple review skills in parallel against a codebase. Spawns specialized subagents, waits for all to complete, and synthesizes findings into a unified report. Supports pre-merge, deep audit, project health, and post-incident modes.
+description: Orchestrate multiple specialist reviews against one target and synthesize a prioritized, deduplicated verdict. Use when a pre-merge review, deep audit, project-health check, post-incident review, test overhaul, design audit, or operational-risk review genuinely needs several independent review skills or subagents.
 user-invocable: true
-argument-hint: "<mode> <target> — modes: pre-merge | deep-audit | health | post-incident | test | design"
+argument-hint: "<mode> <target> — modes: pre-merge | deep-audit | health | post-incident | test | design | operational-risk"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before starting.
 
 ## What this skill does
 
@@ -27,8 +27,8 @@ Spawn **three** parallel subagents:
 
 Spawn **three** parallel subagents:
 
-1. **Section reviewer** — Run `/section-review` on the target. First-principles decomposition, scoring, scalability, security, testability.
-2. **Tech debt assessor** — Run `/tech-debt` on the target. Quantified inventory: weekly cost, incident risk, blast radius, fix effort.
+1. **Section reviewer** — Run `/section-review` on the target. First-principles decomposition, architecture, scalability, security, and testability.
+2. **Tech debt assessor** — Run `/tech-debt` on the target. Evidence-backed inventory: recurring cost, incident exposure, blast radius, and fix complexity.
 3. **API reviewer** — Run `/api-review` on the target. Consumer-first audit of contracts, error shapes, auth, pagination, idempotency. *Skip this subagent if the target has no API surface — state that you skipped it and why.*
 
 ### `health` — Monthly project health check
@@ -43,17 +43,19 @@ Spawn **three** parallel subagents:
 
 Spawn **three** parallel subagents:
 
-1. **Postmortem investigator** — Run `/postmortem` on the target. Reconstruct timeline from git, find process failures, five whys.
+1. **Postmortem investigator** — Run `/postmortem` on the target. Reconstruct the evidence-backed timeline and causal chain.
 2. **Retrospective analyst** — Run `/retro` on the target. Git-data-backed analysis of what actually happened.
 3. **Paranoid reviewer** — Run `/paranoid-review` on the target. Find related bugs that haven't fired yet.
 
-### `test` — Full test suite assessment and remediation
+### `test` — Read-only test suite assessment
 
-Spawn **three** parallel subagents:
+Spawn **three read-only** parallel subagents:
 
 1. **Test auditor** — Run `/test-audit` on the target. Measure real confidence vs. false confidence. Classify every test as valuable, decoration, or harmful. Identify critical untested paths.
-2. **Test writer** — Run `/test-write` on the target. Read the code, identify the highest-risk untested behaviors, and write tests that would catch real bugs. Focus on error paths, edge cases, and security paths.
-3. **Test fixer** — Run `/test-fix` on the target. Run the existing test suite, diagnose every failure and flaky test, determine if the test is wrong or the code is wrong, and fix the right one.
+2. **Coverage diagnostician** — Use `/test-write` in plan-only mode. Identify the highest-risk missing behaviors and specify tests, but do not edit files.
+3. **Failure diagnostician** — Use `/test-fix` in diagnosis-only mode. Analyze supplied or safely reproduced failures, but do not edit product or test files.
+
+After synthesis, recommend a sequential mutation phase only if the user asked for changes: run `/test-fix` first, revalidate, then `/test-write`. Never run multiple writers in one shared worktree. Isolated worktrees require an explicit merge protocol.
 
 ### `design` — Full UX, UI, and accessibility audit
 
@@ -63,6 +65,16 @@ Spawn **three** parallel subagents:
 2. **UI designer** — Run `/ui-designer` on the target. Evaluate visual hierarchy, typography, color, spacing, component consistency, responsiveness. Find design system violations, weak affordances, missing states.
 3. **Accessibility auditor** — Run `/a11y-audit` on the target. Audit against WCAG 2.2 AA. Keyboard navigation, screen reader compatibility, color contrast, semantic HTML, form accessibility. Every violation references the specific WCAG criterion.
 
+### `operational-risk` — Security, migration, and reliability pressure
+
+Spawn **three read-only** parallel subagents:
+
+1. **Security reviewer** — Run `/security-review` on the target. Trace reachable exploit and abuse paths across trust boundaries.
+2. **Migration reviewer** — Run `/migration-review` on the target. Check mixed-version operation, data invariants, sequencing, and recovery.
+3. **Reliability reviewer** — Run `/reliability-review` on the target. Check partial failure, retries, backpressure, observability, and recovery.
+
+Skip a reviewer only when the target has no meaningful surface for that specialty; state the evidence for skipping it.
+
 ## Execution rules
 
 1. **Spawn all subagents in a single message.** Do not run them sequentially. The entire point is parallelism.
@@ -70,6 +82,7 @@ Spawn **three** parallel subagents:
 3. **Each subagent must read `../_house-style/house-style.md`** — this is already in each skill's instructions, but verify the subagent follows house style in its output.
 4. **Wait for all subagents to complete before synthesizing.** Do not start the synthesis until every subagent has returned.
 5. **Do not soften or editorialize subagent findings.** Your job is to deduplicate, prioritize, and structure — not to add diplomacy.
+6. **Keep review modes read-only.** Do not let reviewers edit the target, install dependencies, send active production probes, or mutate external systems.
 
 ## Synthesis rules
 
@@ -77,17 +90,18 @@ After all subagents return:
 
 ### 1. Deduplicate
 
-Multiple reviewers will find the same issue. Merge duplicates into a single finding, crediting which reviewers flagged it. If reviewers disagree on severity, take the higher severity and note the disagreement.
+Multiple reviewers will find the same issue. Merge duplicates into a single finding and credit the reviewers. If reviewers disagree on severity, retain the severity best supported by trigger, impact, reachability, and evidence; note the disagreement.
 
 ### 2. Prioritize
 
 Rank all findings by severity:
 
-1. **Disasters waiting to happen** — structurally guaranteed failures that haven't fired yet
-2. **Critical** — will break in production or is actively broken
-3. **High** — breaks under load, edge cases, or adversarial input
-4. **Medium** — tech debt, missing tests, compounding quality issues
-5. **Low** — style, minor improvements
+1. **Critical** — active or imminent severe impact
+2. **High** — realistic material failure path
+3. **Medium** — compounding quality or operational risk
+4. **Low** — contained improvement
+
+Use `Disaster waiting to happen` only as a tag under the shared finding contract.
 
 ### 3. Resolve conflicts
 
@@ -103,7 +117,7 @@ State the mode, target, and which subagents were spawned.
 
 All findings from all reviewers, deduplicated and priority-ordered. Each finding includes:
 
-- **Severity** (Disaster / Critical / High / Medium / Low)
+- **Severity** (Critical / High / Medium / Low)
 - **Source** (which reviewer(s) flagged it)
 - **File:line** and evidence
 - **The fix** — specific, not "add error handling"

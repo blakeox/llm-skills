@@ -31,13 +31,19 @@ Use The Enforcer. Review this work for real ship blockers only. Ignore low-value
 ## Security directly
 
 ```text
-Use The Security Engineer. Review this change for real exploit paths, trust-boundary mistakes, privilege errors, and data exposure. End with fix-before-release / acceptable-with-guards.
+Use The Security Engineer. Review this change for real exploit paths, trust-boundary mistakes, privilege errors, and data exposure. End with the security-review verdict.
 ```
 
 ## Migration directly
 
 ```text
-Use The Migration Engineer. Assess forward/backward compatibility, mixed-version behavior, rollback safety, and rollout order. End with safe to roll / needs staged migration / unsafe transition.
+Use The Migration Engineer. Assess forward/backward compatibility, mixed-version behavior, rollback safety, and rollout order. End with the migration-review verdict.
+```
+
+## DevEx directly
+
+```text
+Use The Builder. Review this developer-facing API, CLI, SDK, docs flow, or setup path for real developer friction. Separate onboarding/setup bugs from broader developer-journey problems. End with the highest-cost friction taxes first and an honest build / fix / rethink verdict.
 ```
 
 ## Rule of thumb
@@ -48,43 +54,43 @@ Use `The Orchestrator` only when the real question is who should own the work.
 ## Cloudflare release directly
 
 ```text
-Use The Cloudflare Shipper. Review this Cloudflare release for route blast radius, binding mistakes, cache/state surprises, and rollback realism. End with safe to deploy / fix before deploy / Cloudflare red flag.
+Use The Cloudflare Shipper. Review this Cloudflare release for route blast radius, binding mistakes, cache/state surprises, and rollback realism. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## Apple release directly
 
 ```text
-Use The Apple Shipper. Review this TestFlight or App Store release for signing, entitlement, privacy, upgrade, and review blockers. End with safe for TestFlight/App Store / fix before submission / Apple release red flag.
+Use The Apple Shipper. Review this TestFlight or App Store release for signing, entitlement, privacy, upgrade, and review blockers. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## AWS release directly
 
 ```text
-Use The AWS Shipper. Review this AWS release for IAM, secrets, network shape, runtime settings, traffic shift, and rollback risk. End with safe to release / fix before release / AWS release red flag.
+Use The AWS Shipper. Review this AWS release for IAM, secrets, network shape, runtime settings, traffic shift, and rollback risk. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## Google Cloud release directly
 
 ```text
-Use The Google Cloud Shipper. Review this GCP release for IAM, secret access, startup, scaling, and rollback risk. End with safe to release / fix before release / GCP release red flag.
+Use The Google Cloud Shipper. Review this GCP release for IAM, secret access, startup, scaling, and rollback risk. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## Azure release directly
 
 ```text
-Use The Azure Shipper. Review this Azure release for managed identity, Key Vault, slot or revision behavior, ingress, startup, and rollback risk. End with safe to release / fix before release / Azure release red flag.
+Use The Azure Shipper. Review this Azure release for managed identity, Key Vault, slot or revision behavior, ingress, startup, and rollback risk. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## Supabase release directly
 
 ```text
-Use The Supabase Shipper. Review this Supabase release for migration safety, RLS coverage, auth config, Edge Function secrets, storage policy mistakes, and rollback risk. End with safe to release / fix before release / Supabase release red flag.
+Use The Supabase Shipper. Review this Supabase release for migration safety, RLS coverage, auth config, Edge Function secrets, storage policy mistakes, and rollback risk. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## Vercel release directly
 
 ```text
-Use The Vercel Shipper. Review this Vercel release for runtime mismatch, env drift, middleware blast radius, caching behavior, domain routing, and rollback risk. End with safe to release / fix before release / Vercel release red flag.
+Use The Vercel Shipper. Review this Vercel release for runtime mismatch, env drift, middleware blast radius, caching behavior, domain routing, and rollback risk. End with PASS / BLOCK / INDETERMINATE.
 ```
 
 ## Platform detection directly

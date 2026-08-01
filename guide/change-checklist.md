@@ -30,6 +30,10 @@ If not, do not add it yet.
 - Update `README.md`
 - Run `./scripts/install-copilot-skills.sh`
 - Run `./scripts/verify-copilot-skills.sh`
+- Run `./scripts/install-codex-skills.sh` against a temporary destination
+- Run `./scripts/verify-codex-skills.sh` against that destination
+- Add positive and negative prompts to `eval/trigger-cases.json`
+- Run `python3 scripts/validate-skill-bench.py`
 
 ### If you changed guide docs
 
