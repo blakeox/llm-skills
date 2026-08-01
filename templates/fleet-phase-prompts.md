@@ -208,3 +208,19 @@ Use when the repo is shipping somewhere, but you want the system to choose the r
 ```text
 Run a platform-detection pass for this release. Use The Platform Administrator to infer the likely platform from repo signals and release language, choose the right provider-specific shipper, and give me one launch-ready prompt. If this is close to production, tell me whether The Enforcer should run after that.
 ```
+
+## 27. DevEx planning phase
+
+Use when the thing being designed is for developers: APIs, CLIs, SDKs, docs, local tooling, or setup-heavy flows.
+
+```text
+Run a developer-experience planning review for this proposal. Use The Product Mind for who the developer is and what job they are trying to do, then use The Builder to stress-test time-to-first-working-result, auth/setup ergonomics, docs shape, examples, and the honest MVP. End with ship this plan / rescope before building / rethink the whole developer journey.
+```
+
+## 28. Live DevEx audit phase
+
+Use when an API, CLI, SDK, or docs flow already exists and you want the truth about the real developer journey.
+
+```text
+Run a live developer-experience audit on this flow. Use The Builder to act like a real developer, follow the intended path to first success, trigger one realistic failure, and report the friction in order. Focus on docs, auth, setup, examples, error recovery, and what a developer would have to search or ask.
+```

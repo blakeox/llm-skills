@@ -77,7 +77,7 @@ Use this when deciding which agent should own a task.
 - retries, queues, degraded behavior, backpressure, or observability -> `The Reliability Engineer`
 - migrations, rollout order, reversibility, or compatibility during transition -> `The Migration Engineer`
 - consumer compatibility and interface stability -> `The Contract Tester`
-- API practicality, dependencies, onboarding, and delivery friction -> `The Builder`
+- API practicality, dependencies, onboarding, developer journey, and delivery friction -> `The Builder`
 - final ship decision -> `The Enforcer`
 - post-incident learning, retros, and structural debt follow-through -> `The Investigator`
 

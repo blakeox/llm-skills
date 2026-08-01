@@ -17,7 +17,7 @@ Use this when you need the shortest possible reminder of how to route work in th
 - `The Reliability Engineer` — what fails badly in production conditions?
 - `The Migration Engineer` — is the transition survivable during rollout?
 - `The Contract Tester` — will consumers keep working?
-- `The Builder` — is the API/dependency/devex side practical?
+- `The Builder` — is the API, dependency, docs, and developer journey practical?
 - `The Enforcer` — is this safe to ship?
 - `The Investigator` — what should we learn from the incident or debt?
 
@@ -28,6 +28,7 @@ Use this when you need the shortest possible reminder of how to route work in th
 - Implementation from approved plan: `The Architect` + `The Executor` + `The Tester`
 - Bug and regression: `The Debugger` + `The Tester`
 - Security-sensitive API change: `The Security Engineer` + `The Builder` + `The Enforcer`
+- Developer-facing product or docs flow: `The Product Mind` + `The Builder`
 - Performance-sensitive system change: `The Architect` + `The Performance Engineer` + `The Tester`
 - Reliability-sensitive distributed change: `The Reliability Engineer` + `The Architect` + `The Enforcer`
 - Migration or rollout: `The Migration Engineer` + `The Contract Tester` + `The Enforcer`

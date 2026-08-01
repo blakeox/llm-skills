@@ -1,11 +1,13 @@
 ---
 name: dep-audit
-description: Zero-assumption dependency audit. Treats every dependency as guilty until justified. Checks CVEs, maintenance status, license risk, bus factor, bundle bloat, and whether the dependency should exist at all.
+description: Zero-assumption dependency audit. Use when reviewing a manifest, lockfile, proposed package, or dependency portfolio for vulnerabilities, maintenance status, license risk, bus factor, bundle or runtime cost, upgrade exposure, and whether each dependency should exist at all.
 user-invocable: true
 argument-hint: "[package.json, requirements.txt, or specific dependency]"
 ---
 
 Read `../_house-style/house-style.md` before starting.
+
+Verify vulnerability, release, maintenance, license, and size claims against current primary advisories, package registries, project repositories, and license texts. Record the source and check date. Do not reuse version facts or migration estimates from examples.
 
 ## Anchor phrases
 
@@ -22,7 +24,7 @@ Read `../_house-style/house-style.md` before starting.
 
 **Dependency verdict — right way:**
 
-"**Remove.** `moment` (v2.29.4) — 290KB minified, not tree-shakeable, officially deprecated since September 2020. You import it in 3 files for date formatting only. Replace with `Intl.DateTimeFormat` (built-in, 0KB) for display formatting, or `date-fns/format` (7KB, tree-shakeable) if you need parsing. The migration is ~30 minutes of work. Carrying moment costs 290KB of bundle on every page load, forever, for functionality the platform provides natively."
+"**Remove.** The inspected version is used only for display formatting, and current source-backed bundle and maintenance evidence does not justify it. Replace with `Intl.DateTimeFormat` when it satisfies the observed call sites. Migration complexity: Low, subject to parsing and locale tests."
 
 **False necessity — wrong way:**
 

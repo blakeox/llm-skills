@@ -11,6 +11,8 @@ if [[ ! -f "$MANIFEST" ]]; then
   exit 1
 fi
 
+python3 "$REPO_DIR/scripts/validate-skill-bench.py"
+
 missing=0
 
 while IFS= read -r skill || [[ -n "$skill" ]]; do
@@ -41,5 +43,7 @@ if [[ "$missing" -ne 0 ]]; then
   echo "Verification failed. Re-run scripts/install-copilot-skills.sh and start a new Copilot session." >&2
   exit 1
 fi
+
+python3 "$REPO_DIR/scripts/sync-readme.py" --check
 
 echo "Verification passed for $TARGET_DIR"

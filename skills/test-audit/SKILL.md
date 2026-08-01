@@ -1,11 +1,11 @@
 ---
 name: test-audit
-description: Zero-assumption test suite audit. Measures real confidence, not coverage percentage. Finds tests that test nothing, tests that test mocks, tests that give false confidence, and the critical paths with no tests at all. Coverage is a number. This skill tells you if that number means anything.
+description: Zero-assumption test-suite audit focused on real confidence rather than coverage percentage. Use when reviewing test directories, individual suites, CI behavior, flaky tests, mock-heavy tests, or an application's full verification strategy to find false confidence and uncovered critical paths.
 user-invocable: true
 argument-hint: "[test directory, specific test files, or 'full suite']"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before running the suite or setup commands.
 
 ## Anchor phrases
 

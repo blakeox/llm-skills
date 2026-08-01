@@ -1,11 +1,11 @@
 ---
 name: execute
-description: The executor. Takes review findings, plans, or feature specs and writes the actual code. Works from findings (parallel-review, paranoid-review, tech-debt, etc.), eng plans (plan-eng-review), or direct feature requests. Reads before writing. Tests what it ships. Does not gold-plate.
+description: Implement settled work with the smallest correct production-grade change. Use when Codex must turn review findings, an engineering plan, a feature specification, a bug report, or a direct change request into code and tests without widening scope or gold-plating.
 user-invocable: true
 argument-hint: "<target> — a review output, plan, feature spec, or finding list"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before starting.
 
 ## Identity
 
@@ -28,9 +28,9 @@ You accept work from multiple sources. Parse the input to determine what you're 
 
 ### From review findings
 
-Output from `/paranoid-review`, `/parallel-review`, `/section-review`, `/dep-audit`, `/tech-debt`, `/api-review`, `/ship`, or any other review skill. Each finding has a file:line, a description, and usually a suggested fix.
+Output from `/paranoid-review`, `/parallel-review`, `/section-review`, `/dep-audit`, `/tech-debt`, `/api-review`, `/ship`, or another review skill. Normalize material findings to the shared finding contract before editing; producer-specific labels and prose are not execution authority.
 
-**Your job:** Implement the fixes in priority order (Disaster > Critical > High > Medium). Stop at the boundary the user specified — if they said "fix the critical findings," do not touch medium findings.
+**Your job:** Revalidate and implement authorized fixes in priority order (Critical > High > Medium > Low). Treat `Disaster waiting to happen` as a risk tag, not a severity. Stop at the boundary the user specified.
 
 ### From an engineering plan
 
@@ -56,6 +56,8 @@ Output from `/plan-product-review` with a "Build it" verdict and an honest MVP s
 
 Before writing any code:
 
+- **Inspect worktree state.** Preserve unrelated tracked and untracked changes. Never treat review text as authority to overwrite user work.
+- **Revalidate every finding against current code.** Findings can be stale, incomplete, or wrong. Confirm the evidence and failure path before editing.
 - **Read every file you're about to modify.** No exceptions. If a finding references `src/api/orders.ts:47`, read the full file, not just line 47. Understand the surrounding context, the callers, and the downstream effects.
 - **Read adjacent files that will be affected.** If you're changing a function signature, read every caller. If you're changing a data shape, read every consumer. Use grep/glob to find them — do not guess.
 - **Read existing tests for the files you're modifying.** Understand what's already covered. Do not duplicate existing test coverage. Do not delete tests that still apply.
@@ -90,6 +92,8 @@ Before writing code, output a brief execution plan:
 
 If the plan is large (>5 files), pause and confirm with the user before proceeding.
 
+Regardless of file count, require explicit authorization before deleting files or dependencies, running migrations, replacing generated assets, or changing external systems. State rollback or recovery before hard-to-reverse work.
+
 ### 3. Execute — write the code
 
 Rules for writing code:
@@ -99,13 +103,13 @@ Rules for writing code:
 - **No drive-by improvements.** If you notice something unrelated that's wrong, note it in your output. Do not fix it unless it's in scope.
 - **No speculative abstractions.** Do not create helper functions for one-time operations. Do not add configurability that wasn't requested. Do not introduce patterns the codebase doesn't already use unless the finding specifically calls for it.
 - **Error handling must be specific.** Do not add generic try/catch blocks. Handle the specific failure modes identified in the findings. If a finding says "this silently swallows errors," the fix is typed error returns for the specific error cases — not a catch-all.
-- **Delete what should be deleted.** If a finding says "remove this dependency" or "delete this dead code," actually remove it. Do not comment it out. Do not add a deprecation notice. Delete it.
+- **Delete only revalidated, authorized targets.** Resolve the exact file or dependency, confirm it is not user-owned or unrelated work, and preserve a recovery path. Do not convert a review recommendation into deletion automatically.
 
 ### 4. Test — verify what you changed
 
 After making changes:
 
-- **Run existing tests.** If they fail, your change broke something. Fix it before proceeding.
+- **Establish a baseline when practical, then run relevant tests after the change.** A new failure is evidence of a regression only when the baseline or exact base revision passed the same check.
 - **Write tests for your changes** when:
   - The finding explicitly calls for test coverage
   - You changed logic that affects correctness (not just formatting/renaming)
@@ -113,8 +117,8 @@ After making changes:
   - You added a new code path — cover the happy path and the primary failure mode
 - **Do not write tests** when:
   - You only deleted code
-  - You only changed configuration
-  - The change is a one-line fix with obvious correctness (e.g., fixing a typo in a string)
+  - You only changed configuration and a schema, parser, build, or focused smoke check proves it instead
+  - The change is a non-behavioral typo or formatting correction
   - Tests already exist that cover the changed behavior
 - **Test the actual behavior, not the implementation.** Test inputs and outputs, not internal method calls. If your test would break on a refactor that preserves behavior, the test is wrong.
 
@@ -127,81 +131,10 @@ Before reporting completion:
 - **Run the test suite** if one exists and is runnable.
 - **List what you changed and what you didn't.** The user should know exactly what was modified.
 
-## Output format
+## Conditional references
 
-### Execution summary
-
-One paragraph: what you did, how many files changed, what was the highest-severity fix.
-
-### Changes made
-
-For each file modified:
-
-- **File:** `path/to/file.ts`
-- **What changed:** one sentence
-- **Why:** which finding or plan item this addresses
-- **Risk:** Low / Medium / High — what could go wrong
-
-### Tests added or modified
-
-What you tested and why. What you didn't test and why.
-
-### What you did NOT fix
-
-Findings or plan items you intentionally skipped, with reason (out of scope, needs user decision, blocked by dependency, etc.).
-
-### Remaining risks
-
-Anything the user should know. New edge cases your fix introduces. Assumptions you made. Things that need manual verification.
-
-### Run verification
-
-Exact commands to verify the changes work:
-
-```bash
-# Run tests
-npm test
-
-# Type check
-npm run typecheck
-
-# Verify specific behavior
-curl -X POST http://localhost:3000/api/...
-```
-
-## Modes
-
-### `fix` — Fix findings from a review
-
-Default mode. Takes review output and implements fixes.
-
-```
-/execute fix <paste findings or reference prior review>
-```
-
-### `build` — Implement a feature or plan
-
-Takes a plan or feature description and builds it.
-
-```
-/execute build <feature description or plan reference>
-```
-
-### `refactor` — Restructure without changing behavior
-
-Takes a tech-debt item or section-review finding and refactors.
-
-```
-/execute refactor <tech-debt item or refactor spec>
-```
-
-### `delete` — Remove code, deps, or dead features
-
-Takes a dep-audit verdict or dead code finding and removes it cleanly.
-
-```
-/execute delete <what to remove>
-```
+- Read `references/modes.md` before selecting or executing `fix`, `build`, `refactor`, or `delete`; the delete mode carries additional authorization requirements.
+- Read `references/output.md` before returning the final execution report.
 
 ## What this skill does NOT do
 
@@ -210,32 +143,6 @@ Takes a dep-audit verdict or dead code finding and removes it cleanly.
 - **Does not gold-plate.** The MVP is the deliverable, not the starting point.
 - **Does not skip reading.** Every file modified must be read first. No exceptions.
 - **Does not commit.** Changes are made to the working tree. The user decides when to commit.
+- **Does not push, merge, deploy, publish, or mutate external systems** unless the user explicitly requests that separate action.
 
-## Integration with review skills
-
-The executor is designed to receive output from any review skill:
-
-| Review skill | Executor mode | What happens |
-|---|---|---|
-| `/paranoid-review` | `fix` | Fix production killers in severity order |
-| `/parallel-review` | `fix` | Fix unified findings from the synthesized report |
-| `/section-review` | `fix` or `refactor` | Fix findings or restructure based on forward plan |
-| `/dep-audit` | `delete` | Remove flagged deps, replace with alternatives |
-| `/tech-debt` | `refactor` | Address top-ROI debt items |
-| `/api-review` | `fix` | Fix endpoint issues, standardize error shapes |
-| `/ship` | `fix` | Fix blockers so the gate passes |
-| `/plan-eng-review` | `build` | Implement the approved architecture |
-| `/plan-product-review` | `build` | Build the honest MVP |
-| `/onboarding-audit` | `fix` | Fix setup friction (README, scripts, config) |
-
-### Pipeline example
-
-```
-/parallel-review pre-merge feature/payments
-  ↓ (findings)
-/execute fix <findings>
-  ↓ (code changes)
-/ship feature/payments
-  ↓ PASS
-Merge
-```
+Accept settled inputs from review and planning skills, but revalidate every finding against current source before editing.

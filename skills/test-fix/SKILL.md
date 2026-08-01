@@ -1,11 +1,11 @@
 ---
 name: test-fix
-description: Fix broken, flaky, and failing tests. Diagnoses root cause — is the test wrong or is the code wrong? Fixes flakiness at the source, not with retries. Does not make tests green by weakening assertions.
+description: Diagnose and fix broken, flaky, or failing tests without weakening assertions or hiding failures behind retries. Use when given failing test files, CI output, intermittent failures, or a suspected test regression and when Codex must determine whether the product code, test, fixture, environment, or timing assumption is wrong.
 user-invocable: true
 argument-hint: "[failing test files, error output, or 'flaky tests']"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before starting.
 
 ## Identity
 
@@ -31,14 +31,16 @@ This determines everything. Get it backwards and you'll either:
 
 ### How to tell
 
-| Signal | Test is wrong | Code is wrong |
-|---|---|---|
-| Test worked before, code changed recently | Unlikely | Likely — the change broke something |
-| Test never worked / was just written | Likely — test has a bug | Unlikely |
-| Test is flaky (sometimes passes, sometimes fails) | Likely — test has a timing/ordering/state dependency | Possible — code has a race condition |
-| Multiple tests for this behavior all fail | Unlikely | Likely — the behavior changed |
-| Only this test fails, similar tests pass | Likely — this test is different from the others | Unlikely |
-| Test mocks something and the mock is stale | Likely — mock drifted from real implementation | N/A |
+| Signal | Hypotheses to test |
+|---|---|
+| Test worked before, code changed recently | Product regression, changed contract, environment drift, or stale fixture |
+| Test never worked / was just written | Test defect, newly exposed product defect, or misunderstood contract |
+| Test is intermittent | Test timing/state leak, product race, external dependency, or resource pressure |
+| Multiple tests fail | Shared product defect, shared fixture/config defect, or environment failure |
+| Only one test fails | Test-specific setup or a narrowly scoped product defect |
+| Mock differs from implementation | Mock drift; verify against the real boundary before changing either side |
+
+These are hypotheses, not verdicts. Establish the accepted behavior contract and use a baseline, bisect, fixed seed, or controlled causal experiment before editing.
 
 ## Diagnosis process
 
@@ -90,7 +92,7 @@ Then run it with the full suite to check for ordering dependencies.
 - If the test was testing implementation details, rewrite it to test behavior
 
 **If the code is wrong:**
-- Fix the code, not the test
+- Preserve the correct failing test. Fix product code only when the user's request authorizes product changes; otherwise route the evidence to `/execute fix`.
 - The test stays as-is — it correctly caught a bug
 - Write a note in the output: this test failure revealed a code bug
 
@@ -121,49 +123,6 @@ Then run it with the full suite to check for ordering dependencies.
 - **Do not weaken assertions** — `expect(result).toBeTruthy()` instead of `expect(result).toBe('expected')` is a cover-up.
 - **Do not "fix" a test by making it match broken code** without flagging that the code is the real problem.
 
-## Output format
+## Output
 
-### Diagnosis
-
-For each failing test:
-
-- **Test:** `file:line` — test name
-- **Error:** what failed (from error output)
-- **Root cause:** test bug / code bug / flaky / environment
-- **Evidence:** how you determined the root cause
-- **Fix:** what you changed and why
-
-### Fixes applied
-
-For each fix:
-
-- **File:** `path/to/file`
-- **What changed:** one sentence
-- **Why:** root cause it addresses
-- **Confidence:** High / Medium / Low that this resolves the flakiness
-
-### Code bugs discovered
-
-Tests that failed because the code is wrong — not the test. Each includes:
-- What's broken in the code
-- File:line
-- The test that caught it
-- Whether the code was fixed or flagged for `/execute fix`
-
-### Still broken
-
-Tests you couldn't fix, with diagnosis so far and what's needed to resolve.
-
-### Flakiness risk
-
-Tests that pass now but have structural flakiness risk (timing dependencies, shared state, environment assumptions). Flag them before they become problems.
-
-### Run verification
-
-```bash
-# Run the fixed tests
-npm test -- --testPathPattern="fixed-test"
-
-# Run full suite to verify no regressions
-npm test
-```
+Read `references/output.md` before reporting diagnoses, fixes, and unresolved confidence gaps.

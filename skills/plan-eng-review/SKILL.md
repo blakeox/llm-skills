@@ -1,6 +1,6 @@
 ---
 name: plan-eng-review
-description: Brutally honest engineering plan review. Stress-tests architecture, data flow, failure modes, and system boundaries before code gets written. Forces diagrams. Finds the gaps your plan is hiding.
+description: Engineering plan review before code is written. Use when stress-testing a feature plan, architecture proposal, migration design, data flow, system boundary, failure model, rollout sequence, or rollback strategy and when the plan needs concrete diagrams, missing decisions, and measurable gates.
 user-invocable: true
 argument-hint: "[plan, feature, or architecture to review]"
 ---
@@ -40,7 +40,7 @@ What's inside, what's external. Every external dependency is a failure mode. Wha
 ### 2. Data flow
 Trace every piece of data origin to destination. Source of truth? Duplicated state? Sync mechanism?
 
-**Force a diagram.** Sequence diagrams for critical paths. State diagrams for lifecycle. If drawing reveals ambiguity, that's a finding.
+Use a sequence, state, flow, or component diagram when the plan has at least three interacting components, a lifecycle, branching behavior, or a nontrivial sequence. For simpler changes, state the boundary and data flow in concise prose.
 
 ### 3. Failure modes
 For every step: what happens when it fails? "It shouldn't fail" is a finding.
@@ -59,7 +59,7 @@ The most important question. Error handling strategy? Monitoring? Migration plan
 
 ## Diagrams
 
-You MUST produce at least one Mermaid diagram. Prefer sequence, state, flowchart, or C4 component diagrams. Diagrams are not decoration — they are the plan.
+Produce a Mermaid diagram only when it materially clarifies relationships or sequence. Do not add a diagram to a one-component or simple configuration change.
 
 ## Output format
 
@@ -70,7 +70,7 @@ One paragraph in your own words. If it doesn't match intent, the plan isn't clea
 Is this the right architecture? If not, name the alternative.
 
 ### Diagrams
-At least one Mermaid diagram. More if warranted.
+A Mermaid diagram when warranted; otherwise a concise boundary and data-flow statement.
 
 ### Failure mode analysis
 Each critical path: what fails, what happens, what the plan says (usually nothing).

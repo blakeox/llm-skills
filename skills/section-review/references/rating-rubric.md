@@ -1,8 +1,17 @@
 # Section Review Rating Rubric
 
+## Contents
+
+- Score scale and justification rules
+- Scoring emphasis by section type
+- Severity and reversibility tags
+- Confidence and calibration
+- Concrete scoring examples
+- Revolutionary, Bad, Disaster, and latent-risk distinctions
+
 ## Score Scale
 
-The scale is intentionally harsh. Most sections in the real world are a 4-6. A 7 is genuinely good. An 8+ is rare. Hand out high scores like they cost you money.
+The scale is intentionally demanding. Scores follow observed behavior and evidence, not a predetermined distribution.
 
 | Score | Verdict | Definition |
 |---|---|---|
@@ -19,7 +28,7 @@ The scale is intentionally harsh. Most sections in the real world are a 4-6. A 7
 - **Any score of 8+ requires extraordinary evidence.** Name the specific thing that no competitor does as well.
 - **If the section has a single Disaster-level finding, the score cannot exceed 4.** One critical failure poisons the whole section.
 - **If the section has no Revolutionary findings, the maximum score is 8.** You cannot be Revolutionary without something Revolutionary in it.
-- **Any security vulnerability in a production-facing section caps the score at 2.** Security is not a feature — it's a prerequisite. A section with great UX and an XSS vector is a Disaster.
+- **A reachable, material security vulnerability in a production-facing section caps the score at 2.** State exploitability, exposure, impact, and compensating controls.
 - **Default assumption: the section is a 5 until proven otherwise.** Move the score up or down from there based on evidence.
 
 ## Scoring Emphasis by Section Type
@@ -114,7 +123,7 @@ Use these tags on Bad and Disaster findings to indicate impact type:
 | `Blocks task completion` | Prevents the user from finishing what they started. Dead end, unrecoverable error, or missing capability. |
 | `Breaks trust` | Makes the user question whether the system is correct. Silent failures, inconsistent state, misleading feedback, or data loss. |
 | `Security exposure` | Creates an attack surface, leaks data, or fails to enforce authorization. Severity scales with the sensitivity of the data and the exposure of the endpoint. |
-| `Disaster waiting to happen` | The failure hasn't occurred yet, but is structurally guaranteed under realistic growth or usage. Score at full Disaster severity — the distinction between "has blown up" and "will blow up" doesn't change the score. |
+| `Disaster waiting to happen` | A credible trigger and failure mechanism are evidenced, with material likely impact. State reachability, controls, and confidence. |
 
 ## Reversibility Tags
 
@@ -133,11 +142,11 @@ Use these tags on Needs improvement and Needs removal findings:
 | Medium | You have partial evidence — e.g., you read the code but didn't run it, or you saw the UI but didn't test edge cases. Reasonable inferences but gaps remain. |
 | Low | You are reasoning from architecture, naming, or patterns without direct evidence. Flag this explicitly so the reader knows. |
 
-Low confidence is not an excuse to be gentle. You can be uncertain about the evidence and still be blunt about what you see.
+Low confidence requires an explicit verification gap. Be direct about the evidence without presenting inference as proof.
 
 ## Calibration Guidelines
 
-These are anchors to keep scores consistent across reviews. Default to the harsher reading — the user is here for honesty, not comfort.
+These are anchors to keep scores consistent across reviews. Default to the score best supported by evidence.
 
 - **Most software is a 5.** It works on the happy path and that's it. If you're giving out 7s regularly, your standards are too low.
 - **A section that works correctly but looks ugly is Standard mediocre (5-6).** Don't penalize appearance unless it causes usability problems — but don't reward bare functionality either.
@@ -146,7 +155,7 @@ These are anchors to keep scores consistent across reviews. Default to the harsh
 - **A section that only 1 user needs but serves them perfectly can still be Revolutionary.** Audience size doesn't determine quality.
 - **A missing section is not automatically Bad.** If it's not needed, its absence is fine. Only flag it as Missing if the workflow is incomplete without it.
 - **A section with good bones but one critical bug should score for the bug, not the bones.** A bridge with one broken support beam is not a 7/10 bridge.
-- **When in doubt between two scores, pick the lower one.** The review should push toward improvement, not reassurance.
+- **When evidence supports two scores, use the lower-confidence conclusion and name the evidence that would distinguish them.**
 - **Do not grade on a curve.** Compare against what the section should be, not against how hard it was to build.
 - **"It works" is not praise — it's the minimum.** Only call something out as good if it genuinely exceeds expectations.
 - **Do not give credit for intent.** The code does what it does, not what the developer meant it to do.
@@ -249,29 +258,29 @@ When a problem is both common and compounding, it's a Disaster even if each indi
 
 ## Disasters Waiting to Happen
 
-**A problem does not need to have caused harm yet to be a Disaster.** If the failure is structurally guaranteed given a realistic scenario, it scores as a Disaster *now* — not when it explodes.
+**A problem does not need to have caused harm yet to be urgent.** A latent issue earns Disaster treatment only when a realistic trigger, reachable failure mechanism, material impact, and insufficient controls are evidenced.
 
 Score these as Disaster (1-2) even if they currently "work fine":
 
 - **Race conditions that only trigger under load.** If two concurrent requests can corrupt data, that's a Disaster — even if you've only ever had one user at a time.
-- **Missing indexes on tables that are small today.** A full table scan on 100 rows is invisible. On 100,000 rows it takes down the page. The code is the same; the score should be the same.
+- **Missing indexes on demonstrated growth paths.** Show query shape, expected growth, execution evidence, and the threshold where the scan becomes material.
 - **Auth checks only in the frontend.** Works until someone opens the network tab. This is a security Disaster even if no one has exploited it.
 - **Unbounded queries or lists with no pagination.** Returns 50 items today. Returns 50,000 items next year. The endpoint didn't change — the data did.
 - **Hardcoded secrets, credentials, or API keys in source.** No one has stolen them yet. That doesn't make the code secure.
 - **State that can diverge but hasn't yet.** Duplicated state between two stores, client and server, or cache and database — if there's no sync mechanism, divergence isn't a risk, it's a certainty on a long enough timeline.
 - **Silent data loss paths.** A write that can fail without the user knowing. A migration that drops a column nobody queries *yet*. A cache eviction that deletes uncommitted work.
-- **Dependencies with known CVEs that haven't been exploited.** The vulnerability exists whether or not someone has used it against you.
+- **Reachable dependencies with applicable known vulnerabilities.** Verify the affected version, call path, exploit conditions, and compensating controls.
 
 ### How to identify them
 
-Ask: **"Is there a realistic scenario — not a contrived edge case, but a scenario that will naturally occur as the product grows — where this breaks?"** If yes, it's a Disaster waiting to happen, and it scores as a Disaster.
+Ask: **"What exact realistic trigger reaches this failure, what is the impact, and what controls prevent it?"** Use the tag only when the evidence supports the full chain.
 
-The word "waiting" is not a discount. A bomb that hasn't gone off is still a bomb.
+The word `waiting` identifies latent harm. It does not replace severity or confidence calibration.
 
 ### Severity tag
 
-Tag these findings with `Disaster waiting to happen` in addition to any other applicable tags (`Security exposure`, `Breaks trust`, etc.). This tells the reader that the harm is latent, not yet observed — but the finding is scored at full severity because the failure is structural, not speculative.
+Tag these findings with `Disaster waiting to happen` in addition to the normal severity and impact tags. State that harm is latent and identify the evidence supporting the trigger.
 
 ### Score justification rule
 
-**If a section contains a Disaster waiting to happen, the score cannot exceed 4.** Same rule as an active Disaster. The distinction between "has blown up" and "will blow up" does not change the score — it changes the urgency.
+**If a section contains a high-confidence Disaster waiting to happen, the score cannot exceed 4.** Medium- or low-confidence suspicions require verification before they cap the score.

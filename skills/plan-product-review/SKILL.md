@@ -1,6 +1,6 @@
 ---
 name: plan-product-review
-description: Brutally honest product review. Questions whether you're building the right thing before you build it. Finds the real product hiding inside the request. Treats every feature as guilty until proven necessary.
+description: Product-value review before implementation. Use when deciding whether a feature, workflow, integration, or product proposal should exist, what user problem it actually solves, what the constrained MVP is, and which scope should be removed before engineering begins.
 user-invocable: true
 argument-hint: "[feature or plan description]"
 ---
@@ -64,7 +64,7 @@ Forget constraints. What would make this magical? This isn't scope creep — it'
 
 ### 6. What's the honest MVP?
 
-The smallest version that solves the real problem (not the symptom), validates demand, ships in days, and doesn't block the 10-star version later.
+The smallest version that solves the real problem, validates demand, respects dependency order, and does not block the 10-star version later. Do not invent delivery duration; classify complexity when environment and team data are missing.
 
 The MVP is not "the 10-star version minus the hard parts."
 

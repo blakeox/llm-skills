@@ -1,11 +1,11 @@
 ---
 name: onboarding-audit
-description: Zero-knowledge onboarding audit. Pretends to be a new developer who has never seen this repo. Tries to get it running. Documents every friction point. Every Google search is a documentation failure.
+description: Zero-knowledge repository onboarding audit. Use when testing whether a new developer can clone, configure, understand, run, test, and safely change a project without tribal knowledge, undocumented credentials, external searches, or hidden setup steps.
 user-invocable: true
 argument-hint: "[repo path or URL]"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before starting.
 
 ## Anchor phrases
 
@@ -34,6 +34,8 @@ Read `../_house-style/house-style.md` before starting.
 
 ## Process
 
+Run the workflow in a disposable clone or isolated worktree. Do not modify the user's primary checkout, install global packages, provision external services, or use real credentials.
+
 1. **Read only the README** — document what's clear, unclear, and missing
 2. **Follow setup exactly** — no improvising. Every failure is a finding.
 3. **Track "would Google" moments** — each one = documentation bug
@@ -43,14 +45,14 @@ Read `../_house-style/house-style.md` before starting.
 
 ## Output format
 
-### Onboarding score
+### Onboarding measurements
 
 | Metric | Value |
 |---|---|
 | Clone to running | X min |
 | Steps that worked as written | X/Y |
 | Google searches required | X |
-| Score | X/10 |
+| Evidence status | Observed / Static only / Incomplete |
 
 ### Critical blockers
 Can't proceed without external help.

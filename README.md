@@ -2,40 +2,49 @@
 
 Public home for Blake Oxford's open-source workflow and review skills.
 
-Current bundle version: `0.7.0`
+<!-- BEGIN generated:bundle-version -->
+Current bundle version: `0.10.0`
+<!-- END generated:bundle-version -->
 
 A cross-platform specialist bench for AI coding agents. Same skills, same routing, four platforms:
 
 - **GitHub Copilot** — `.github/agents/` + `~/.copilot/skills/`
 - **Claude Code** — `claude/agents/` (with `skills:` frontmatter) + `~/.claude/skills/`
 - **OpenClaw** — `openclaw/skills/` (agent-as-skills) + `extraDirs` (live reference)
-- **Codex** — `~/.codex/skills/` (symlinks)
+- **Codex** — rendered, repository-owned copies in `~/.codex/skills/`
 
 One orchestrator routes to specialists. Specialists compose skills. Skills are the shared vocabulary.
 
 ## Included skills
 
+<!-- BEGIN generated:included-skills -->
 - `_house-style`
+- `a11y-audit`
 - `api-review`
-- `apple-ship`
-- `aws-ship`
-- `azure-ship`
-- `cloudflare-ship`
 - `dep-audit`
-- `google-cloud-ship`
+- `devex-review`
+- `execute`
+- `migration-review`
 - `onboarding-audit`
+- `parallel-review`
 - `paranoid-review`
+- `plan-devex-review`
 - `plan-eng-review`
 - `plan-product-review`
+- `platform-ship`
 - `postmortem`
+- `reliability-review`
 - `retro`
 - `section-review`
+- `security-review`
 - `ship`
-- `supabase-ship`
 - `tech-debt`
+- `test-audit`
+- `test-fix`
+- `test-write`
 - `ui-designer`
 - `ux-designer`
-- `vercel-ship`
+<!-- END generated:included-skills -->
 
 These are the published skills currently included in this repository.
 
@@ -51,12 +60,12 @@ The `.github/agents/` directory contains opinionated agent profiles that bundle 
 - `debugger.agent.md` — root-cause bug-fixing specialist
 - `tester.agent.md` — high-signal test strategy specialist
 - `breaker.agent.md` — adversarial hardening and break-testing specialist
-- `security.agent.md` — auth, trust-boundary, abuse-path, and exposure specialist
+- `security.agent.md` — `security-review` trust-boundary, abuse-path, and exposure specialist
 - `performance.agent.md` — latency, memory, throughput, and scale specialist
-- `reliability.agent.md` — observability, retries, failure handling, and recovery specialist
-- `migration.agent.md` — staged rollout, schema/data transition, and rollback specialist
+- `reliability.agent.md` — `reliability-review` observability, retries, failure handling, and recovery specialist
+- `migration.agent.md` — `migration-review` staged rollout, schema/data transition, and rollback specialist
 - `contract-tester.agent.md` — consumer compatibility and contract-validation specialist
-- `builder.agent.md` — `api-review` + `dep-audit` + `onboarding-audit`
+- `builder.agent.md` — `api-review` + `dep-audit` + DevEx planning/live review + `onboarding-audit`
 - `investigator.agent.md` — `postmortem` + `retro` + `tech-debt`
 - `designer.agent.md` — `ux-designer` + `ui-designer`
 - `accessibility.agent.md` — keyboard, screen-reader, semantics, and inclusive-interaction specialist
@@ -349,6 +358,8 @@ This repository is now structured so the same bench can be used across several a
 
 These files do not replace the source surfaces. The canonical bench still lives in `skills/`, `.github/agents/`, `claude/agents/`, and `openclaw/skills/`.
 
+Provider release checks use one `platform-ship` skill with conditional Apple, AWS, Azure, Cloudflare, Google Cloud, Supabase, and Vercel references. Provider-specific agent profiles remain as focused routers. Replace legacy provider commands with `$platform-ship <provider>`.
+
 ## Install
 
 ```bash
@@ -371,6 +382,8 @@ Then run the installer for your platform:
 # Codex
 ./scripts/install-codex.sh
 ```
+
+The Codex installer validates the source bench, renders Codex-native frontmatter and `$skill` invocations, generates UI metadata, and refuses to overwrite unowned skill directories.
 
 See [INSTALL.md](INSTALL.md) for detailed setup including OpenClaw ACP bridge configuration.
 
@@ -447,8 +460,13 @@ llm-skills/
 │   ├── install-claude.sh
 │   ├── install-openclaw.sh
 │   ├── install-codex.sh
+│   ├── install-codex-skills.sh
+│   ├── sync-codex-skills.py
+│   ├── sync-readme.py
+│   ├── validate-skill-bench.py
 │   ├── verify-copilot-agents.sh
-│   └── verify-copilot-skills.sh
+│   ├── verify-copilot-skills.sh
+│   └── verify-codex-skills.sh
 ├── AGENTS.md
 ├── CHANGELOG.md
 ├── CLAUDE.md
@@ -456,7 +474,8 @@ llm-skills/
 ├── VERSION
 ├── eval/
 │   ├── README.md
-│   └── cases.md
+│   ├── cases.md
+│   └── trigger-cases.json
 ├── examples/
 │   ├── executor-transcript.md
 │   ├── fleet-review-transcript.md
@@ -485,24 +504,29 @@ llm-skills/
 └── skills/
     ├── manifest.txt
     ├── _house-style/
+    ├── a11y-audit/
     ├── api-review/
-    ├── apple-ship/
-    ├── aws-ship/
-    ├── azure-ship/
-    ├── cloudflare-ship/
     ├── dep-audit/
-    ├── google-cloud-ship/
+    ├── devex-review/
+    ├── execute/
+    ├── migration-review/
     ├── onboarding-audit/
+    ├── parallel-review/
     ├── paranoid-review/
+    ├── plan-devex-review/
     ├── plan-eng-review/
     ├── plan-product-review/
+    ├── platform-ship/
     ├── postmortem/
+    ├── reliability-review/
     ├── retro/
     ├── section-review/
+    ├── security-review/
     ├── ship/
-    ├── supabase-ship/
     ├── tech-debt/
+    ├── test-audit/
+    ├── test-fix/
+    ├── test-write/
     ├── ui-designer/
-    ├── vercel-ship/
     └── ux-designer/
 ```

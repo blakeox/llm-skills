@@ -1,0 +1,102 @@
+{
+  "a11y-audit": {
+    "positive": ["Audit this checkout for keyboard, screen-reader, contrast, and focus barriers."],
+    "negative": ["Make the dashboard spacing and typography feel more coherent."]
+  },
+  "api-review": {
+    "positive": ["Review these API routes for error shapes, pagination, idempotency, and compatibility."],
+    "negative": ["Can a new developer clone this repository and run it without tribal knowledge?"]
+  },
+  "dep-audit": {
+    "positive": ["Audit this lockfile for vulnerable, abandoned, costly, or unnecessary dependencies."],
+    "negative": ["The unit tests are flaky in CI; diagnose and fix them."]
+  },
+  "devex-review": {
+    "positive": ["Use this SDK documentation as a new consumer and find the path to first working request."],
+    "negative": ["Clone this repository from scratch and test its contributor onboarding."]
+  },
+  "execute": {
+    "positive": ["Implement this approved plan with the smallest correct code and tests."],
+    "negative": ["Review whether this product idea should exist before anyone builds it."]
+  },
+  "migration-review": {
+    "positive": ["Review this Postgres backfill and schema contraction for mixed-version and recovery safety."],
+    "negative": ["Check whether the steady-state REST response shape is intuitive for consumers."]
+  },
+  "onboarding-audit": {
+    "positive": ["Test whether a new contributor can clone, configure, run, test, and change this repository."],
+    "negative": ["Review the authentication flow in our public SDK documentation."]
+  },
+  "parallel-review": {
+    "positive": ["Run an operational-risk review across security, migration, and reliability for this payment change."],
+    "negative": ["Fix this one failing deterministic unit test."]
+  },
+  "paranoid-review": {
+    "positive": ["Review this pull request for production correctness, races, data loss, and silent failure before merge."],
+    "negative": ["Verify the AWS account, artifact, rollout, alarms, and rollback before production deployment."]
+  },
+  "plan-devex-review": {
+    "positive": ["Stress-test this proposed CLI authentication and quickstart journey before implementation."],
+    "negative": ["Run the existing CLI as a new consumer and measure actual setup friction."]
+  },
+  "plan-eng-review": {
+    "positive": ["Review this architecture proposal, data flow, failure model, and rollback plan before coding."],
+    "negative": ["Decide whether users need this feature and define the smallest valuable version."]
+  },
+  "plan-product-review": {
+    "positive": ["Decide whether this integration solves a real user problem and cut it to an honest MVP."],
+    "negative": ["Stress-test the settled migration architecture and deployment sequence."]
+  },
+  "platform-ship": {
+    "positive": ["Gate this Cloudflare Worker release using current account, route, binding, runtime, and rollback evidence."],
+    "negative": ["Review this branch for generic code quality before it is ready to deploy."]
+  },
+  "postmortem": {
+    "positive": ["Reconstruct this payment outage and identify evidence-backed causal and control failures."],
+    "negative": ["Review what the team shipped last sprint and where delivery flow stalled."]
+  },
+  "reliability-review": {
+    "positive": ["Audit this queue consumer for retries, backpressure, partial failure, silent loss, and recovery."],
+    "negative": ["Review whether this schema backfill can coexist with old application versions."]
+  },
+  "retro": {
+    "positive": ["Review the sprint using delivery artifacts and identify justified process changes."],
+    "negative": ["Reconstruct the causal timeline of yesterday's production outage."]
+  },
+  "section-review": {
+    "positive": ["Give this billing subsystem a bounded first-principles quality review; no narrower specialty owns the question."],
+    "negative": ["Audit these endpoints specifically for authentication and privilege escalation paths."]
+  },
+  "security-review": {
+    "positive": ["Trace exploit and abuse paths through this admin impersonation endpoint and tenant boundary."],
+    "negative": ["Review retry storms, queue growth, degraded behavior, and recovery for this background job."]
+  },
+  "ship": {
+    "positive": ["Run the final generic branch and CI release gate before merge."],
+    "negative": ["Verify this Vercel deployment's project, environment, middleware, traffic, and rollback evidence."]
+  },
+  "tech-debt": {
+    "positive": ["Inventory this subsystem's recurring operational debt, blast radius, and remediation dependency order."],
+    "negative": ["Audit whether the current dependencies are vulnerable, abandoned, or unnecessary."]
+  },
+  "test-audit": {
+    "positive": ["Audit whether this test suite provides real confidence or only coverage theater."],
+    "negative": ["Add focused regression tests for this confirmed boundary bug."]
+  },
+  "test-fix": {
+    "positive": ["Diagnose and fix these failing and flaky tests without weakening assertions."],
+    "negative": ["Identify the highest-risk missing tests in this otherwise passing suite."]
+  },
+  "test-write": {
+    "positive": ["Write high-signal regression tests for these confirmed failure and boundary paths."],
+    "negative": ["Determine whether the current flaky test or product code is actually wrong."]
+  },
+  "ui-designer": {
+    "positive": ["Give this dashboard concrete hierarchy, spacing, typography, component, and state direction."],
+    "negative": ["Redesign the onboarding workflow to reduce steps and clarify the user's success moment."]
+  },
+  "ux-designer": {
+    "positive": ["Redesign this checkout flow around the user's job, recovery, and time to value."],
+    "negative": ["Define the visual type scale, spacing grid, and component hierarchy for this screen."]
+  }
+}

@@ -46,7 +46,7 @@ A non-hedged ending decision such as:
 - ship it
 - fix then ship
 - rethink
-- safe to roll
+- ready to stage
 - unsafe transition
 
 ## Deletion bias

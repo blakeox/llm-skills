@@ -95,7 +95,7 @@ Look at this migration.
 ### Better
 
 ```text
-Use The Migration Engineer to assess forward/backward compatibility, partial-rollout behavior, and rollback safety for this migration. End with safe to roll / needs staged migration / unsafe transition.
+Use The Migration Engineer to assess forward/backward compatibility, partial-rollout behavior, and rollback safety for this migration. End with the migration-review verdict.
 ```
 
 ### Weak

@@ -1,11 +1,11 @@
 ---
 name: test-write
-description: Write missing tests that catch real bugs. Takes code, findings, or coverage gaps and produces tests that verify behavior — not implementation. Tests the sad path harder than the happy path. Every test must justify its existence.
+description: Write missing high-signal tests that verify behavior and catch realistic bugs. Use when given source files, functions, review findings, regressions, acceptance criteria, or coverage gaps that require focused unit, integration, contract, or end-to-end tests, especially for failure and boundary paths.
 user-invocable: true
 argument-hint: "<target> — files, functions, findings, or 'coverage gaps'"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/active-testing.md` before starting.
 
 ## Identity
 
@@ -63,7 +63,7 @@ Prioritize by risk, not by coverage percentage:
 
 **Do not test:**
 - Private implementation details that will break on refactor
-- Framework behavior (React renders, Express routes, ORM queries — these are tested by their authors)
+- Framework internals already tested by the framework. Test application wiring through React, Express, ORM, or similar boundaries when a configuration or integration defect would matter.
 - Trivial getters/setters/constructors with no logic
 - Type correctness (that's the type checker's job)
 - Constants or configuration values
@@ -136,7 +136,7 @@ expect(result.error.code).toBe('CARD_EXPIRED');
 - Each test must pass in isolation and in any order.
 - No shared mutable state between tests.
 - Clean up after yourself — database records, temp files, environment variables.
-- If a test fails only when run with other tests, that's a bug in the test, not the code.
+- If a test fails only with other tests, investigate test isolation, product global state, caches, ports, database state, and races. Do not decide whether the test or product is wrong without a causal reproducer.
 
 ## Input types
 
@@ -164,42 +164,6 @@ Write regression tests that would have caught each finding. The test must fail a
 
 Read coverage reports, identify the highest-risk uncovered paths, write tests. Prioritize by blast radius, not by coverage percentage.
 
-## Output format
+## Output
 
-### Test plan
-
-Before writing tests, state:
-
-- What you're testing and why
-- What you're NOT testing and why
-- Which existing test patterns you're following
-- Which test utilities/factories you'll reuse
-
-### Tests written
-
-For each test file:
-
-- **File:** `path/to/test.ts`
-- **Tests added:** count
-- **What they cover:** the specific behaviors/paths
-- **What they would have caught:** which finding or bug class
-
-### Coverage impact
-
-What was uncovered before, what's covered now. Focus on risk reduction, not percentage points.
-
-### Tests you intentionally did NOT write
-
-And why. "Not worth testing" is valid — say what makes it not worth it.
-
-### False confidence warning
-
-If the test suite still has known gaps after your additions, name them. A test suite that claims completeness is lying.
-
-### Run command
-
-Exact command to run the new tests:
-
-```bash
-npm test -- --testPathPattern="path/to/test"
-```
+Read `references/output.md` before reporting test changes and remaining confidence gaps.

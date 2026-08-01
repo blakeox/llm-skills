@@ -1,11 +1,13 @@
 ---
 name: ship
-description: Pre-flight gate that refuses to ship if things aren't ready. Zero-assumption checklist — treats every branch as guilty until proven shippable. Checks for debug code, secrets, test coverage, PR hygiene, and rollback readiness.
+description: Evidence-based pre-flight release gate that passes or blocks a branch or pull request. Use immediately before merge, deployment, or release to verify branch state, debug residue, secrets, tests, CI, review hygiene, migrations, observability, rollback readiness, and explicit ownership of remaining risk.
 user-invocable: true
 argument-hint: "[branch name or PR number]"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` and `../_house-style/release-gate.md` before starting.
+
+This skill owns repository, branch, CI, review, migration, and generic release-control readiness. Use `/platform-ship` for provider control-plane and runtime evidence, then synthesize both gates. Neither gate may borrow evidence from the other.
 
 ## Anchor phrases
 
@@ -22,7 +24,7 @@ Read `../_house-style/house-style.md` before starting.
 
 **Gate result — right way:**
 
-"**BLOCK.** 3 failures: (1) `src/utils/debug.ts:14` — `console.log('DEBUG:', payload)` left in production code. (2) `app/config.ts:3` — hardcoded API key `sk_live_abc123` committed to source. This is a security incident regardless of whether anyone has exploited it yet. (3) No tests for the new `/api/orders` endpoint — the only coverage is a happy-path integration test that doesn't verify auth, validation, or error responses. Fix all 3 before this ships."
+"**BLOCK.** 3 failures: (1) `src/utils/debug.ts:14` — `console.log('DEBUG:', payload)` left in production code. (2) `app/config.ts:3` — hardcoded payment-provider API key `[redacted]` committed to source. Revoke or rotate it and clean retained history without reproducing the value. (3) No tests for the new `/api/orders` endpoint — the only coverage is a happy-path integration test that doesn't verify auth, validation, or error responses. Fix all 3 before this ships."
 
 ## First principles
 
@@ -82,7 +84,7 @@ Every item is pass/fail. Cite file:line for failures.
 
 ### Pre-flight result
 
-**PASS** or **BLOCK**
+**PASS**, **BLOCK**, or **INDETERMINATE** under the shared release-gate contract.
 
 ### Checklist results
 Each section pass/fail. Failures: file:line and what's wrong.
@@ -98,5 +100,5 @@ For any borderline calls: what might justify shipping anyway? (Usually nothing.)
 
 ### What I verified / What I didn't check
 
-### Ship command *(only if PASS)*
-Exact git commands. Copy-paste ready.
+### Proposed ship command *(only if PASS and requested)*
+Exact git commands for the user to evaluate. Do not execute merge, push, deploy, publish, or release actions unless separately and explicitly requested.

@@ -1,6 +1,6 @@
 ---
 name: postmortem
-description: Brutally honest incident postmortem. Reconstructs what happened from git, deploys, and logs — not from memory. Questions the process that allowed this to ship, not just the code that broke. No blame, all accountability.
+description: Evidence-backed, blameless incident postmortem. Use after an outage, security event, failed deployment, data incident, or material near miss to reconstruct the timeline from git, deploys, metrics, and logs; identify technical and control failures; and define owned corrective actions.
 user-invocable: true
 argument-hint: "[incident description, PR, or commit]"
 ---
@@ -22,18 +22,18 @@ Read `../_house-style/house-style.md` before starting.
 
 **Root cause — right way:**
 
-"The column was dropped in migration `20240301_remove_legacy_fields.rb` (commit `abc1234`, author: Alice, deployed 14:32 UTC). The reporting service still reads this column at `app/queries/revenue_report.rb:67`. Alice didn't know because: (1) there's no cross-service dependency map, (2) the migration had no test that verifies downstream consumers, (3) the PR review (Bob, 14:15 UTC) didn't check for cross-service impact — the review focused on the migrating service only. Root cause: the team has no mechanism to detect cross-service column dependencies. This is the third time a migration has broken a downstream consumer this quarter (see incidents #41, #47). The pattern will repeat until there's automated cross-service schema validation in CI."
+"The column was dropped in migration `20240301_remove_legacy_fields.rb` and deployed at 14:32 UTC. The reporting service still reads it at `app/queries/revenue_report.rb:67`. The supported contributing conditions are: no cross-service dependency map, no downstream-consumer migration test, and a review scope limited to the migrating service. The corrective control is automated cross-service schema compatibility validation before deployment."
 
 ## Investigation process
 
 ### 1. Reconstruct timeline from evidence
 Git history, deploy logs, monitoring. Not from memory. Include the **detection gap** (deploy → detection).
 
-### 2. Five Whys — actually do all five
-Don't stop at "the code had a bug." The final Why must implicate a process or system.
+### 2. Build an evidence-backed causal chain
+Continue until the actionable contributing conditions are supported. Do not force exactly five layers or predetermine a process-only root cause. Technical, design, control, organizational, and external causes can coexist. State confidence for every causal link.
 
 ### 3. Question the process
-For each link: was there a review? Tests? Monitoring? Rollback plan? Time pressure? Who decided to prioritize speed over correctness?
+For each link: was there a review? Tests? Monitoring? Rollback plan? Which role owned the decision or control? Separate decision ownership from personal blame.
 
 ### 4. Challenge the narrative
 - "We didn't have time to test" → What was prioritized instead?
@@ -47,13 +47,13 @@ Root cause or symptom? Would recurrence be prevented? Similar patterns elsewhere
 ## Output format
 
 ### Incident summary
-One paragraph: what, who affected, how long, impact in numbers.
+One paragraph: what happened, who or what was affected, observed duration, and measured impact. Mark unavailable data instead of estimating it.
 
 ### Timeline
 Chronological table: timestamp, event, source. Detection gap prominently displayed.
 
-### Root cause chain
-Five Whys with evidence. Final Why implicates process.
+### Causal chain
+Contributing conditions with evidence, confidence, and the point where evidence runs out.
 
 ### Process failures
 What should have caught this: review, test, monitoring, docs, communication gaps. Why each failed.
@@ -65,6 +65,12 @@ Symptom or root cause? Similar vulnerabilities elsewhere?
 Could the team's narrative be right? What context might justify the decisions that led here?
 
 ### Action items
-Specific, owned, time-bound. What changes, who, by when, how you verify.
+Specific and verifiable. Name the responsible role when known; do not invent a person or deadline. Sequence by dependency and state the verification condition.
 
-### What I didn't investigate / Recurrence risk (1-5, justified)
+### Recurrence risk
+
+Likelihood, impact, controls, and confidence. Avoid fake numeric precision.
+
+### What I didn't investigate
+
+Missing evidence, inaccessible systems, redacted sensitive data, and what would close each gap.

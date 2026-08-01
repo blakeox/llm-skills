@@ -1,11 +1,11 @@
 ---
 name: api-review
-description: Zero-assumption API design review. Uses the API as a consumer first, then audits contracts, error shapes, auth model, pagination, versioning, idempotency, and rate limiting. Every endpoint is guilty until proven correct.
+description: Zero-assumption API design review from the consumer's perspective. Use when reviewing API routes, controller code, SDK contracts, or an OpenAPI specification for usability, error shapes, authentication, pagination, versioning, idempotency, compatibility, and rate limiting.
 user-invocable: true
 argument-hint: "[API routes, controller files, or OpenAPI spec]"
 ---
 
-Read `../_house-style/house-style.md` before starting.
+Read `../_house-style/house-style.md` before starting. Before sending requests, read `../_house-style/active-testing.md`.
 
 ## Anchor phrases
 
@@ -56,23 +56,22 @@ Writes idempotent? Concurrent modification handling? Ordering dependencies?
 Versioned? Breaking change policy? Deprecation path?
 
 ### Adversarial testing
-For every endpoint: empty body, huge strings, nested garbage, wrong types, SQL injection, XSS, path traversal, negative IDs, duplicate requests within 100ms. Document what the API does with each.
+For every relevant endpoint, define tests for empty bodies, bounded oversized input, nested garbage, wrong types, injection, traversal, invalid identifiers, and duplicate requests. Execute only in an environment authorized under the active-testing contract; otherwise report the planned probes as `Not verified`.
 
 ## Output format
 
 ### Consumer experience
 One paragraph from the outside.
 
-### API score
+### API evidence summary
 
-| Metric | Score (1-10) |
+| Metric | Evidence | Verdict |
 |---|---|
-| Consistency | |
-| Error handling | |
-| Auth coverage | |
-| Documentation | |
-| Adversarial resilience | |
-| **Overall** | |
+| Consistency | | Sound / Broken / Not verified |
+| Error handling | | Sound / Broken / Not verified |
+| Auth coverage | | Sound / Broken / Not verified |
+| Documentation | | Sound / Broken / Not verified |
+| Adversarial resilience | | Sound / Broken / Not verified |
 
 ### Critical findings
 Security vulns, auth gaps, data exposure. Endpoint, trigger, fix.
@@ -89,4 +88,10 @@ What consumers need that doesn't exist.
 ### Devil's advocate
 For harshest findings: internal-only API? Known consumers? Intentional tradeoffs?
 
-### What I didn't test / Recommended changes (priority order)
+### Recommended changes
+
+Priority-ordered and dependency-driven.
+
+### What I didn't verify
+
+Unrun endpoints, inaccessible auth modes, unavailable runtime evidence, and what would close each gap.
